@@ -1,0 +1,20 @@
+{
+  "name": "venture-blueprint",
+  "version": "1.0.0",
+  "description": "Plans a whole software product or company from one idea, or from none, down to a build roadmap an agent can execute overnight: wedge, economics, compliance, architecture, design language, growth, monetization, in-house tooling, ordered build steps and parallel session briefs.",
+  "author": {
+    "name": "Naty"
+  },
+  "license": "MIT",
+  "keywords": [
+    "planning",
+    "product",
+    "roadmap",
+    "market-research",
+    "compliance",
+    "monetization",
+    "growth",
+    "design-system",
+    "startup"
+  ]
+}

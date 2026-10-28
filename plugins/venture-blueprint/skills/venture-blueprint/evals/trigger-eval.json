@@ -1,0 +1,82 @@
+[
+  {
+    "query": "ok so i have this idea for an app where neighbours lend each other tools, like drills and ladders and pressure washers. can you plan the whole thing out properly? market, stack, legal side, how we'd actually make money, and a build order i can execute",
+    "should_trigger": true
+  },
+  {
+    "query": "make me millions",
+    "should_trigger": true
+  },
+  {
+    "query": "i want to build a booking app for barbershops in houston. is this a good idea or am i kidding myself? what am i missing here",
+    "should_trigger": true
+  },
+  {
+    "query": "here's my repo for a meal prep app (~/code/prepd). we've got about 400 users and growth has been flat for 3 months. what's missing from the product and what should we build next quarter?",
+    "should_trigger": true
+  },
+  {
+    "query": "plan out monetization and payments for an app that has to take money in kenya, nigeria and the us. we're bootstrapped so no outside money, and i need to know what actually blocks us",
+    "should_trigger": true
+  },
+  {
+    "query": "need a go to market plus pricing for a b2b tool that helps dental offices chase unpaid insurance claims. no idea what to charge",
+    "should_trigger": true
+  },
+  {
+    "query": "whats a business i could realistically start with 15 years in commercial HVAC and about 15k saved up",
+    "should_trigger": true
+  },
+  {
+    "query": "roadmap please. ios + android + web, events ticketing, needs to ship in 6 weeks and pass app store review. tell me what order to build it in",
+    "should_trigger": true
+  },
+  {
+    "query": "do a competitive analysis of ai meeting notes tools and tell me honestly whether there's room for another one, and where the gap would be",
+    "should_trigger": true
+  },
+  {
+    "query": "i need to plan a whole saas product from scratch, design language and all, then run several claude sessions overnight to build it without them stepping on each other",
+    "should_trigger": true
+  },
+  {
+    "query": "fix this null pointer, src/auth/session.ts:84 throws when the refresh token is expired",
+    "should_trigger": false
+  },
+  {
+    "query": "write me a pitch deck for investors, 10 slides, we're raising a seed round next month",
+    "should_trigger": false
+  },
+  {
+    "query": "what's eventbrite's current fee structure for organizers?",
+    "should_trigger": false
+  },
+  {
+    "query": "add stripe checkout to my next.js app, i already have the account and the keys are in .env.local",
+    "should_trigger": false
+  },
+  {
+    "query": "review the changes on this branch for security problems before i merge",
+    "should_trigger": false
+  },
+  {
+    "query": "make me a social media content calendar for my coffee shop for next month, like 12 posts with captions",
+    "should_trigger": false
+  },
+  {
+    "query": "can you refactor Button.tsx to use our design tokens instead of the hardcoded hex colors",
+    "should_trigger": false
+  },
+  {
+    "query": "explain how app store review actually works, im just curious how long it takes",
+    "should_trigger": false
+  },
+  {
+    "query": "write the privacy policy text for my app, we collect email and photos",
+    "should_trigger": false
+  },
+  {
+    "query": "set up a github action that runs our vitest suite on every PR and blocks merge if it fails",
+    "should_trigger": false
+  }
+]
