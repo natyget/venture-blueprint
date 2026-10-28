@@ -357,6 +357,83 @@ def check_decisions(data, rep):
                 rep.error(where, f"rejected {r.get('option')!r} with no reason")
 
 
+def canonical_traps():
+    """The fixed trap list, so the CSV and the checker cannot drift apart."""
+    path = Path(__file__).resolve().parent.parent / "templates" / "traps.json"
+    try:
+        return json.loads(path.read_text(encoding="utf-8")).get("traps", [])
+    except (OSError, json.JSONDecodeError):
+        return []
+
+
+def check_traps(path, step_ids, rep):
+    canon = canonical_traps()
+    if not path.exists():
+        rep.error("traps.csv", "missing — run new_plan.py to seed the trap sweep")
+        return
+    rows = list(csv.DictReader(path.open(encoding="utf-8")))
+    if not rows:
+        rep.error("traps.csv", "no rows — the sweep is not optional")
+        return
+    needed = {"id", "category", "question", "status", "answer",
+              "source", "verified", "step"}
+    missing_cols = needed - set(rows[0].keys())
+    if missing_cols:
+        rep.error("traps.csv", f"missing columns: {sorted(missing_cols)}")
+        return
+
+    today = dt.date.today()
+    seen = set()
+    for i, row in enumerate(rows, 2):
+        tid = (row.get("id") or "").strip()
+        where = f"traps.csv:{i}"
+        if not tid:
+            rep.error(where, "row has no id")
+            continue
+        if tid in seen:
+            rep.error(where, f"duplicate trap id {tid}")
+        seen.add(tid)
+
+        status = (row.get("status") or "").strip().lower()
+        answer = (row.get("answer") or "").strip()
+        if status not in {"answered", "n/a"}:
+            rep.error(where, f"[{tid}] status must be 'answered' or 'n/a', got "
+                             f"{status or 'empty'!r} — an unanswered trap is one "
+                             "nobody looked at")
+            continue
+        if not answer:
+            extra = (" — 'n/a' still needs the reason it does not apply"
+                     if status == "n/a" else "")
+            rep.error(where, f"[{tid}] no answer{extra}")
+
+        if status != "answered":
+            continue
+        if not (row.get("source") or "").strip():
+            rep.error(where, f"[{tid}] answered with no source")
+        verified = (row.get("verified") or "").strip()
+        if not verified:
+            rep.error(where, f"[{tid}] answered with no verified date")
+        else:
+            try:
+                age = (today - dt.date.fromisoformat(verified)).days
+                if age > STALE_DAYS:
+                    rep.warn(where, f"[{tid}] verified {age} days ago — platform "
+                                    "rules and statutes move; re-check")
+                elif age < 0:
+                    rep.error(where, f"[{tid}] verified date is in the future")
+            except ValueError:
+                rep.error(where, f"[{tid}] verified is not YYYY-MM-DD: {verified!r}")
+        for sid in re.split(r"[,\s]+", (row.get("step") or "").strip()):
+            if sid and sid not in step_ids:
+                rep.error(where, f"[{tid}] step {sid!r} is not in roadmap.json")
+
+    for trap in canon:
+        if trap.get("id") not in seen:
+            rep.error("traps.csv", f"canonical trap {trap.get('id')} "
+                                   f"({trap.get('category')}) is missing: "
+                                   f"{trap.get('question', '')[:70]}")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("plan_dir")
@@ -374,6 +451,7 @@ def main():
     roadmap = load_json(plan / "roadmap.json", rep)
     steps_by_id, _ = check_roadmap(roadmap, rep) if roadmap else ({}, {})
     check_compliance(plan / "compliance.csv", set(steps_by_id), rep)
+    check_traps(plan / "traps.csv", set(steps_by_id), rep)
     decisions = load_json(plan / "decisions.json", rep)
     if decisions:
         check_decisions(decisions, rep)

@@ -11,14 +11,14 @@ It is a method, not a business-plan template. The output is not a pitch deck —
 **As a plugin (recommended — you get updates):**
 
 ```
-/plugin marketplace add <your-github-user>/venture-blueprint
+/plugin marketplace add natyget/venture-blueprint
 /plugin install venture-blueprint
 ```
 
 **As a skill, for every project on your machine:**
 
 ```bash
-git clone https://github.com/<your-github-user>/venture-blueprint.git
+git clone https://github.com/natyget/venture-blueprint.git
 ln -s "$PWD/venture-blueprint/plugins/venture-blueprint/skills/venture-blueprint" ~/.claude/skills/venture-blueprint
 ```
 
@@ -80,6 +80,12 @@ Each ends with a gate — a question you must answer from written evidence, not 
 | Ecosystem and in-house tools | For every step from problem to money: who owns it, and is absorbing it justified? |
 | Roadmap | Does every step have an anchor, a risk, a test and a revert? Is the cut line written? |
 | Red team | What kills this in six months, what is unverified, and what cannot be undone? |
+
+## The trap sweep
+
+Running through every phase is a fixed list of 24 questions whose answers are free now and expensive later — the ones where a third party's rule quietly decides your margin or your legality and nothing in your own code mentions it. Is each revenue line consumed in the app or in the world (because that decides whether a store takes a cut of it)? Does a minor signing up attach duties you did not know about? Do you ever hold someone else's money, even briefly? Does a transitive dependency's licence conflict with how you ship?
+
+Judgement finds the traps you can imagine. A fixed checklist finds the ones you can't — so the list is fixed, `traps.csv` has no blanks, and "not applicable" has to carry a reason.
 
 ## The one idea worth keeping
 

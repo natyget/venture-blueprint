@@ -45,6 +45,24 @@ accounts,Apple 5.1.1(v),Account deletion available in app,in force,implement,A12
 
 `posture` is one of `in force`, `enjoined`, `effective <date>`, `proposed`. `approach` is one of `implement`, `design away`, `avoid feature`. `counsel` is `required` or `no`.
 
+## `traps.csv`
+
+The trap sweep from `references/traps.md`. `new_plan.py` seeds every canonical row from `templates/traps.json`; `check_plan.py` requires each one to be present and complete, so a plan cannot pass by quietly dropping a question.
+
+```csv
+id,category,question,status,answer,source,verified,step
+T01,platform,"For each revenue line separately: is the thing being bought consumed inside the app, or in the real world?","answered","Three lines. Event tickets are consumed in the world, so no store commission. Ad credits and SMS credits are consumed in the app, so they are sold on the web only and the app does not offer them.",https://developer.apple.com/app-store/review/guidelines/,2026-10-28,
+T02,platform,"Does anything let a user buy credits, ad spend, boosts, balances or promotion from inside the app?","answered","No. Organizer ad and messaging credits are web-dashboard only, deliberately, so no in-app purchase obligation attaches.",https://developer.apple.com/app-store/review/guidelines/,2026-10-28,W6
+T10,users,"Do you capture anything that counts as a biometric identifier, and does any state with a private right of action apply?","n/a","No biometric capture anywhere in the product.",,,
+T13,money,"Do you ever hold money belonging to someone else, even briefly?","answered","No. Funds settle directly to the seller's own connected account and we take a platform fee, so no money-transmission exposure.",https://stripe.com/docs/connect,2026-10-28,C4
+```
+
+`status` is `answered` or `n/a`, and nothing else — an empty status is an unanswered question, which the validator treats as an error rather than a default. An `answered` row needs both `source` and `verified` (`YYYY-MM-DD`); an `n/a` row needs the reason in `answer`, because "n/a" with no reason is indistinguishable from not having looked. `step` is optional and names the roadmap step that does the work when a trap needs some.
+
+The T01/T02 rows above are a real worked example: a product can owe a store nothing on its main revenue line and still owe commission on a smaller one, which is why the question is answered per revenue line rather than per product. Selling that line on the web only is the design that removes the obligation.
+
+Project-specific traps the research turns up get their own ids (`P01`, `P02`) and are held to the same standard.
+
 ## `roadmap.json`
 
 The steps, the gates, and the things that cannot be undone. `scripts/parallel_brief.py` reads this to generate the build briefs and to prove that concurrent workstreams own disjoint files.

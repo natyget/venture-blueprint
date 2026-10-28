@@ -14,7 +14,7 @@ The method's one non-negotiable idea: **a plan is a set of claims, and a claim w
 ## What you hand over
 
 - **A `plan/` directory** of numbered documents, one per phase, scaffolded by `scripts/new_plan.py`. Each is written to be read on its own by someone who joins at that phase.
-- **Three machine-readable artifacts** that downstream build sessions and the validator consume: `decisions.json` (every choice, its rejected alternatives and why), `compliance.csv` (feature → rule → requirement → implementing step → evidence), and `roadmap.json` (ordered steps with anchors, risks, tests, owners and file sets).
+- **Four machine-readable artifacts** that downstream build sessions and the validator consume: `decisions.json` (every choice, its rejected alternatives and why), `compliance.csv` (feature → rule → requirement → implementing step → evidence), `traps.csv` (the fixed trap sweep, every row answered with a source or marked n/a with a reason), and `roadmap.json` (ordered steps with anchors, risks, tests, owners and file sets).
 - **Parallel build briefs** from `scripts/parallel_brief.py`: one self-contained prompt per workstream, with disjoint file ownership, so several agent sessions can build through the night without overwriting each other.
 - **A green validator run.** `scripts/check_plan.py` fails on unsourced claims, steps with no test, triggered compliance rows with no implementing step, features with no measurement, and leftover placeholders. Hand over nothing red.
 - **A short note in chat:** the wedge in two sentences, the three decisions you most want challenged, what you could not verify and who must verify it, and the first step to run tonight.
@@ -48,6 +48,8 @@ Run these in order. Each phase ends with a gate — a question you must be able 
 | 8. Ecosystem and in-house tools | `08-ecosystem.md` | For every step between the customer's problem and the money: who owns it today, and is absorbing it justified by fee, dependency, data or retention? |
 | 9. Roadmap | `09-roadmap.md` | Does every step have an anchor, a risk, a test and a revert? Is the cut line written? Are the human-only steps separated out? |
 | 10. Red team | `10-red-team.md` | What kills this in six months, what is unverified, and what cannot be undone? |
+
+**Across all of them, run the trap sweep** in `references/traps.md` — a fixed list of questions whose answers are free now and expensive later, because a third party's rule quietly decides your margin or your legality and nothing in your own code mentions it. Run it at Phase 3, again at Phase 7, and again in Phase 10, because adding one feature can flip an answer. Judgement finds the traps you can imagine; a fixed checklist finds the ones you can't, which is why the list is fixed and the validator refuses a plan that leaves a row unanswered.
 
 Then run `scripts/check_plan.py` and fix everything it reports.
 
@@ -85,6 +87,8 @@ These are the rules that separate a plan from a wish. Each one exists because it
 
 **Say plainly what you did not verify and what you did not do.** "I have no BigQuery credentials, so someone on your side must run these" is a complete, useful sentence. Quiet gaps are how plans fail in the third week.
 
+**Ask the fixed questions even when they look irrelevant.** The traps that cost the most are the ones nothing in your product hints at: a revenue line reclassified by a store rule, an obligation that attaches because of who signed up, a licence buried in a transitive dependency. You cannot find these by thinking harder about your own design, only by asking a set list out loud and writing the answer down — which is why `traps.csv` has no blanks and "n/a" carries a reason.
+
 **No invented specifics.** Never fabricate a competitor's price, a review quote, a statute number, a library API or a market figure to fill a slot. An honest `UNVERIFIED:` is worth more than a plausible fiction, which is indistinguishable from research until it is expensive.
 
 ## Working with the user
@@ -107,6 +111,8 @@ Where this skill's method and the user's stated preference disagree, the user wi
 - `references/08-ecosystem.md`: the value-chain map, build vs buy vs absorb, the operator console inventory, moderation and support
 - `references/09-roadmap.md`: the step format, workstreams and dependency order, the cut line, gates, rollback, and how to cut a plan into parallel overnight sessions
 - `references/10-red-team.md`: the hostile read, externalities and edge cases, kill scenarios, the pre-handoff audit
+- `references/traps.md`: the trap sweep — not a phase, but a fixed question list run at Phases 3, 7 and 10, for the third-party rules that decide your margin or legality without appearing anywhere in your code
+- `templates/traps.json`: the canonical trap list, seeded into `traps.csv` by `new_plan.py` and enforced by `check_plan.py`, so the two cannot drift
 - `templates/schemas.md`: the shape of `decisions.json`, `compliance.csv` and `roadmap.json`, with a worked example of each. The phase-document skeletons live in `scripts/new_plan.py`, which writes them
 - `examples/pxi-analytics-release.md`: a real release plan at the target resolution, annotated with the technique each section demonstrates
 

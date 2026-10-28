@@ -66,6 +66,7 @@ For each, name the leading indicator you could watch and where it would be visib
 
 Go through the whole plan once more against this list, then run the validator.
 
+- [ ] The trap sweep is complete: every canonical row answered with a source, or n/a with a reason, and re-asked since the product last changed shape
 - [ ] Every number has a source and a date, or an `UNVERIFIED:` marker
 - [ ] "What the re-read changed" exists and is not empty
 - [ ] The market size is built bottom-up from countable units

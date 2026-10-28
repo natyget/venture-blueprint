@@ -1,0 +1,150 @@
+{
+  "version": 1,
+  "note": "The canonical trap sweep. Every question must be answered explicitly in traps.csv with a dated source, or marked n/a with a reason. new_plan.py seeds the CSV from this file and check_plan.py enforces completeness, so this file is the single source of truth for both.",
+  "traps": [
+    {
+      "id": "T01",
+      "category": "platform",
+      "question": "For each revenue line separately: is the thing being bought consumed inside the app, or in the real world?",
+      "why": "This single classification decides whether a store takes 15-30% of that line. Products routinely sit on both sides at once, so a per-product answer is wrong."
+    },
+    {
+      "id": "T02",
+      "category": "platform",
+      "question": "Does anything let a user buy credits, ad spend, boosts, balances or promotion from inside the app?",
+      "why": "Credits spent inside the app have historically been treated as in-app purchases even when they ultimately buy something real. A commission on top of advertising spend can erase that line's margin."
+    },
+    {
+      "id": "T03",
+      "category": "platform",
+      "question": "Does the app link out to a web checkout, and is that permitted in every storefront you ship to?",
+      "why": "The link-out rules differ per storefront, change by court order, and are actively litigated. Secondary sources contradict each other, so this needs a primary source and a date."
+    },
+    {
+      "id": "T04",
+      "category": "platform",
+      "question": "Is store commission included in gross margin at a rate you verified, and what happens to the business if that rate moves?",
+      "why": "A margin that only works at 0% commission has a single point of failure in someone else's legal department."
+    },
+    {
+      "id": "T05",
+      "category": "platform",
+      "question": "Is there an OS version, target API level or SDK deadline that forces you to ship on a date you do not control?",
+      "why": "It turns a backlog item into a hard deadline, and it is invisible until the store starts refusing builds."
+    },
+    {
+      "id": "T06",
+      "category": "platform",
+      "question": "Can users create accounts, and is in-app account deletion implemented with a web-accessible path?",
+      "why": "Both stores require it where accounts exist. It is a common rejection and a cheap thing to build early, expensive to retrofit through a cascade of foreign keys."
+    },
+    {
+      "id": "T07",
+      "category": "users",
+      "question": "Can a minor create an account, and which app-store age-signal duties attach — in which states, on which dates?",
+      "why": "These laws bind developers, not only stores: consume the store's age bracket, honour parental consent, notify stores before significant changes. Deadlines are staggered per state and at least one state has no cure period."
+    },
+    {
+      "id": "T08",
+      "category": "users",
+      "question": "Can someone in the EU or UK sign up, whether or not you market there?",
+      "why": "GDPR attaches to the user's location, not the company's. One signup form with no geo restriction is enough."
+    },
+    {
+      "id": "T09",
+      "category": "users",
+      "question": "Which US state privacy laws attach, and at what revenue or data-volume threshold?",
+      "why": "Several attach only above a threshold, which makes compliance a cost cliff that arrives with growth rather than at launch."
+    },
+    {
+      "id": "T10",
+      "category": "users",
+      "question": "Do you capture anything that counts as a biometric identifier, and does any state with a private right of action apply?",
+      "why": "Face, voice and fingerprint data carry notice, consent and destruction duties. The states with a private right of action are where class actions cluster, and on-device matching can remove the exposure entirely."
+    },
+    {
+      "id": "T11",
+      "category": "users",
+      "question": "Does the product capture, store or display people who never signed up?",
+      "why": "Shared cameras, tagging, guest lists and contact import all do this. Without a removal path it is both a legal exposure and the thing that gets a consumer app written about badly."
+    },
+    {
+      "id": "T12",
+      "category": "users",
+      "question": "Do you send SMS or email, and is there a consent record in the data model plus carrier registration where required?",
+      "why": "SMS consent rules carry statutory damages per message and a private right of action. Consent belongs in your database, not in the sending tool's dashboard."
+    },
+    {
+      "id": "T13",
+      "category": "money",
+      "question": "Do you ever hold money belonging to someone else, even briefly between collection and payout?",
+      "why": "This is the question that decides your architecture. Holding funds points at money-transmission licensing, which will stop a bootstrapped company. Routing funds directly to the seller designs it away."
+    },
+    {
+      "id": "T14",
+      "category": "money",
+      "question": "Who is the merchant of record on each transaction, and whose name is on the customer's statement?",
+      "why": "It determines who owns chargebacks, refunds, tax collection and the support burden when a charge is disputed."
+    },
+    {
+      "id": "T15",
+      "category": "money",
+      "question": "Is your product taxable in your own state, and do marketplace facilitator rules make you the collector on others' sales?",
+      "why": "Software and data-processing services are taxed unusually in some states, including Texas. It is a surprise that arrives as back taxes."
+    },
+    {
+      "id": "T16",
+      "category": "money",
+      "question": "What happens to a seller who makes sales and then fails KYC?",
+      "why": "It will happen, and without a plan it becomes a support emergency with someone else's money in the middle."
+    },
+    {
+      "id": "T17",
+      "category": "money",
+      "question": "Which of your payment rails have no chargeback mechanism, putting the fraud loss on you?",
+      "why": "Mobile money and bank-push rails often behave this way. It changes your fraud controls, not just your accounting."
+    },
+    {
+      "id": "T18",
+      "category": "dependency",
+      "question": "Is any supplier a single point of failure that could raise prices, change terms, cut you off, or launch your product?",
+      "why": "The most dangerous version is a supplier who owns a step that is actually your differentiation. It stays invisible until the day it isn't."
+    },
+    {
+      "id": "T19",
+      "category": "dependency",
+      "question": "Which free tiers, per-seat steps or fee bands do you cross as you grow, and at what number?",
+      "why": "Cliffs are the costs people miss, because they do not exist in the model at today's scale."
+    },
+    {
+      "id": "T20",
+      "category": "dependency",
+      "question": "Does any dependency's licence conflict with how you distribute the product?",
+      "why": "A copyleft library inside a closed-source app, or a font or icon set licensed for personal use only, is a legal problem embedded in a build artifact. Check the transitive tree and the fonts, not just the direct dependencies."
+    },
+    {
+      "id": "T21",
+      "category": "dependency",
+      "question": "Can you export your own data in a usable form if a supplier shuts down or you leave?",
+      "why": "Data you cannot get out is a switching cost you pay rather than one you charge."
+    },
+    {
+      "id": "T22",
+      "category": "identity",
+      "question": "Has the name been trademark-searched, and are the domain, store listing name and social handles secured?",
+      "why": "Renaming after launch costs the store listing, the SEO, the links, the assets and the app icon. It is hours of work now and weeks later."
+    },
+    {
+      "id": "T23",
+      "category": "irreversible",
+      "question": "What in this plan cannot be undone once run?",
+      "why": "Consent answers, sent messages, published versions, deleted data, filed entities, activated data filters. People need this list before they run a step casually, not after."
+    },
+    {
+      "id": "T24",
+      "category": "measurement",
+      "question": "Is every revenue line attributable to the channel that produced it?",
+      "why": "A channel you cannot attribute is one you cannot scale or cut, so spend accumulates against it indefinitely."
+    }
+  ]
+}

@@ -11,6 +11,7 @@ Usage:  python3 -I scripts/new_plan.py <plan-dir> --name "<venture>"
 """
 
 import argparse
+import csv
 import datetime as dt
 import json
 import sys
@@ -195,6 +196,25 @@ def main():
             "feature,regime,requirement,posture,approach,step,evidence,"
             "source,verified,counsel\n", encoding="utf-8")
         written.append("compliance.csv")
+
+    traps_path = plan / "traps.csv"
+    if traps_path.exists() and not args.force:
+        skipped.append("traps.csv")
+    else:
+        canon = Path(__file__).resolve().parent.parent / "templates" / "traps.json"
+        with traps_path.open("w", newline="", encoding="utf-8") as fh:
+            writer = csv.writer(fh)
+            writer.writerow(["id", "category", "question", "status", "answer",
+                             "source", "verified", "step"])
+            try:
+                traps = json.loads(canon.read_text(encoding="utf-8"))["traps"]
+            except (OSError, json.JSONDecodeError, KeyError) as exc:
+                print(f"  warning: could not read {canon}: {exc}")
+                traps = []
+            for trap in traps:
+                writer.writerow([trap["id"], trap["category"], trap["question"],
+                                 "", "", "", "", ""])
+        written.append("traps.csv")
 
     print(f"Scaffolded {plan} for {args.name!r}")
     if written:
