@@ -8,6 +8,8 @@ It is a method, not a business-plan template. The output is not a pitch deck —
 
 ## Install
 
+Not technical? **[INSTALL.md](INSTALL.md)** walks through it in plain language.
+
 **As a plugin (recommended — you get updates):**
 
 ```
