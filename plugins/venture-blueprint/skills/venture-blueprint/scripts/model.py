@@ -429,7 +429,12 @@ def main():
 
     scenarios = a.get("scenarios") or DEFAULT_SCENARIOS
     results = {name: run(a, sc) for name, sc in scenarios.items()}
-    out_csv, out_md = plan / "financials.csv", plan / "financials.md"
+    if args.assumptions and src.resolve() != (plan / "assumptions.json").resolve():
+        # A path file from Stage 1: write its results beside it, not over the plan's.
+        out_csv = src.with_name(f"{src.stem}-financials.csv")
+        out_md = src.with_name(f"{src.stem}-financials.md")
+    else:
+        out_csv, out_md = plan / "financials.csv", plan / "financials.md"
     unverified, missing = write_outputs(plan, a, results,
                                         hashlib.sha256(raw).hexdigest()[:16],
                                         out_csv, out_md)

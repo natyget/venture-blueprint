@@ -145,9 +145,11 @@ DOCS = [
         ("Business model and pricing", "Model, unit, prices, free tier, rails and their order, the store-policy line per revenue line."),
         ("Financials", "From financials.md only: scenarios, how cost and revenue scale, break-even and cash low point, unit economics, drivers, assumptions."),
         ("Go-to-market", "The first fifty customers, the channel that scales, the loop and its arithmetic, launch sequence."),
+        ("Organization", "From departments.md: who does what at launch, the hiring sequence and triggers, the team's monthly cost by stage."),
         ("Compliance and risk", "Obligations and how each is met or designed away, trap findings, rows for a lawyer, kill scenarios. Not legal advice."),
         ("Statement of work", "Scope in and out, deliverables with acceptance criteria, milestones, roles, dependencies and lead times, budget, assumptions, change control."),
         ("Milestones and metrics", "Per company stage, the falsifiable target that means move on."),
+        ("Long-term path", "The expansion sequence, the moat at each stage, and how this ends — and what that implies now."),
         ("What is unverified and what is next", "Every UNVERIFIED claim and who can settle it, the decisions most worth challenging, the next action."),
         ("Appendix", "Links to the phase documents and data files."),
     ]),
@@ -275,6 +277,55 @@ def main():
                 writer.writerow([trap["id"], trap["category"], trap["question"],
                                  "", "", "", "", ""])
         written.append("traps.csv")
+
+    (plan / "paths").mkdir(exist_ok=True)
+
+    dept_path = plan / "departments.md"
+    if dept_path.exists() and not args.force:
+        skipped.append("departments.md")
+    else:
+        roster = Path(__file__).resolve().parent.parent / "templates" / "departments.json"
+        try:
+            depts = json.loads(roster.read_text(encoding="utf-8"))["departments"]
+        except (OSError, json.JSONDecodeError, KeyError) as exc:
+            print(f"  warning: could not read {roster}: {exc}")
+            depts = []
+        out = [f"# Departments — {args.name}", "", f"_Phase document. Last updated {today}._", "",
+               "<!-- Take the seat of each department's head two stages from now: what do they wish "
+               "had been decided on day one, and what was a waste to set up early? See "
+               "references/departments.md. A whole department may be marked Not applicable, with "
+               "the reason and the trigger to revisit. -->", ""]
+        for d in depts:
+            out += [f"## {d['id']} {d['name']}", "",
+                    f"<!-- {d['lens']} Ask: " + " / ".join(d["asks"]) + " -->", ""]
+            for label in ("What breaks first", "Day one", "Stack", "Who, by stage",
+                          "Agents can run", "KPIs"):
+                out += [f"**{label}:** TODO: fill this in.", ""]
+        out += ["## Cross-functional review", "",
+                "<!-- The real tensions between departments in this plan, and how each is resolved. -->",
+                "", "TODO: fill this in.", ""]
+        dept_path.write_text("\n".join(out), encoding="utf-8")
+        written.append("departments.md")
+
+    val_path = plan / "validation.md"
+    if val_path.exists() and not args.force:
+        skipped.append("validation.md")
+    else:
+        val_path.write_text("\n".join([
+            f"# Validation — {args.name}", "", f"_Phase document. Last updated {today}._", "",
+            "## Riskiest assumptions", "",
+            "<!-- From What matters most on the venture site, the paths' what-has-to-be-true, and "
+            "the red team. Ranked by how much breaks if wrong times how unsure you are. -->", "",
+            "TODO: fill this in.", "",
+            "## Experiments", "",
+            "<!-- One per assumption: assumption, method, who and how many, cost and time, the "
+            "threshold to keep going, the threshold to stop, and what changes either way. Written "
+            "before running. -->", "", "TODO: fill this in.", "",
+            "## Interview script", "", "TODO: fill this in.", "",
+            "## Results log", "",
+            "| Date | Experiment | What happened | Numbers | Decision |",
+            "|---|---|---|---|---|", ""]), encoding="utf-8")
+        written.append("validation.md")
 
     print(f"Scaffolded {plan} for {args.name!r}")
     if written:

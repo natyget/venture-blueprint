@@ -1,0 +1,75 @@
+{
+  "path": "C \u00b7 Rental marketplace",
+  "summary": "Anyone lists tools for rent; we take a cut of each rental and hold a deposit through the processor.",
+  "customers": {
+    "label": "active renters",
+    "new_first_month": 40,
+    "new_growth_monthly": 0.11,
+    "new_max_per_month": 2500,
+    "churn_monthly": 0.1,
+    "cac": 14,
+    "source": "UNVERIFIED: rough Stage 1 estimate for comparison only"
+  },
+  "revenue_lines": [
+    {
+      "name": "Rental commission",
+      "kind": "take_rate",
+      "rate": 0.15,
+      "gmv_per_customer_month": 38,
+      "processing_fixed": 0.3,
+      "transactions_per_customer_month": 1.2,
+      "source": "UNVERIFIED: rough Stage 1 estimate for comparison only"
+    }
+  ],
+  "variable_costs": [
+    {
+      "name": "Damage and disputes",
+      "pct_of_revenue": 0.12,
+      "source": "UNVERIFIED: rough Stage 1 estimate for comparison only"
+    },
+    {
+      "name": "Infra",
+      "per_customer_month": 0.08,
+      "source": "UNVERIFIED: rough Stage 1 estimate for comparison only"
+    }
+  ],
+  "fixed_costs": [
+    {
+      "name": "Hosting and tools",
+      "monthly": 150,
+      "steps": [
+        {
+          "at_customers": 2000,
+          "monthly": 900
+        }
+      ],
+      "source": "UNVERIFIED: rough Stage 1 estimate for comparison only"
+    },
+    {
+      "name": "Legal and accounting",
+      "monthly": 300,
+      "source": "UNVERIFIED: rough Stage 1 estimate for comparison only"
+    },
+    {
+      "name": "Founder draw",
+      "monthly": 3000,
+      "start_month": 10,
+      "source": "Founder, this conversation"
+    },
+    {
+      "name": "Trust and safety contractor",
+      "monthly": 0,
+      "steps": [
+        {
+          "at_customers": 1500,
+          "monthly": 3000
+        }
+      ],
+      "source": "UNVERIFIED: rough Stage 1 estimate for comparison only"
+    }
+  ],
+  "venture": "ToolShare",
+  "currency": "USD",
+  "months": 36,
+  "starting_cash": 12000
+}

@@ -1,3 +1,7 @@
 __pycache__/
 *.pyc
 .DS_Store
+
+# Plans made by people who cloned this repo to try it stay out of the repo
+ventures/
+plan/

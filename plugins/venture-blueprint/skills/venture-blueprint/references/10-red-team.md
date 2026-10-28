@@ -66,6 +66,10 @@ For each, name the leading indicator you could watch and where it would be visib
 
 Go through the whole plan once more against this list, then run the validator.
 
+- [ ] Every department is planned from its head's seat, or not applicable with a reason and a trigger, and its hires and tools are in the model
+- [ ] The riskiest assumptions each have an experiment with keep-going and stop thresholds written before running
+- [ ] The prototype covers the core loop, the buyer's screen and the money moment, with no broken links, in the design language's tokens
+- [ ] The venture site is rebuilt from the current files
 - [ ] The trap sweep is complete: every canonical row answered with a source, or n/a with a reason, and re-asked since the product last changed shape
 - [ ] Every number has a source and a date, or an `UNVERIFIED:` marker
 - [ ] "What the re-read changed" exists and is not empty

@@ -1,0 +1,41 @@
+{
+  "platform": "ios",
+  "tokens": {
+    "accent": "#e8590c",
+    "bg": "#fbf8f4"
+  },
+  "start": "near",
+  "flows": [
+    {
+      "name": "Finding a tool nearby",
+      "steps": [
+        "near",
+        "item",
+        "plus"
+      ]
+    }
+  ],
+  "screens": [
+    {
+      "id": "near",
+      "title": "Nearby",
+      "for": "a neighbour who needs a tool today",
+      "notes": "Distance is the product: if nothing is within a short walk, the app is useless, which is why this path needs density before it works.",
+      "html": "<div class='title'>Nearby</div><div class='search'><i data-i='search'></i>What do you need?</div><div class='map'><span class='pin' style='left:30%;top:40%'></span><span class='pin' style='left:62%;top:28%'></span><span class='pin' style='left:48%;top:66%'></span><span class='pin' style='left:78%;top:58%'></span></div><div class='section-h'>Within 10 minutes</div><div class='list'><div class='row' data-go='item'><div class='avatar'>JR</div><div class='tx'><div class='t'>Hedge trimmer</div><div class='s'>4 min walk \u00b7 lent 12 times</div></div><div class='r'><i data-i='chevron-right'></i></div></div><div class='row'><div class='avatar'>AK</div><div class='tx'><div class='t'>Tile saw</div><div class='s'>9 min walk</div></div><div class='r'><i data-i='chevron-right'></i></div></div></div><div class='tabbar'><div class='tab on'><i data-i='map-pin'></i>Nearby</div><div class='tab'><i data-i='plus'></i>Lend</div><div class='tab'><i data-i='chat'></i>Messages</div><div class='tab'><i data-i='user'></i>Me</div></div>"
+    },
+    {
+      "id": "item",
+      "title": "Item",
+      "for": "a neighbour deciding to ask",
+      "notes": "Borrowing from a stranger needs trust: a face, a history, and cover if something breaks.",
+      "html": "<div class='bar'><span class='a' data-back><i data-i='chevron-left'></i>Nearby</span><span class='t'></span><span class='a r'><i data-i='heart'></i></span></div><div class='img hero'>Hedge trimmer</div><div class='h'>Hedge trimmer</div><div class='list'><div class='row'><div class='avatar'>JR</div><div class='tx'><div class='t'>Lent by J.</div><div class='s'>Lent 12 times \u00b7 replies in about an hour</div></div></div></div><div class='btn' data-go='plus'>Ask to borrow</div><div class='note'>Breakage cover needs Plus.</div>"
+    },
+    {
+      "id": "plus",
+      "title": "Plus",
+      "for": "a borrower who wants cover",
+      "notes": "The only revenue in this path. It is sold in the app, so the store takes a cut \u2014 one reason the numbers struggle.",
+      "html": "<div class='bar'><span class='a' data-back><i data-i='x'></i></span><span class='t'>ToolShare Plus</span><span class='a r'></span></div><div class='done'><div class='ok'><i data-i='star'></i></div><div class='h' style='padding:0'>Borrow without worry</div><div class='sub' style='padding:0'>Breakage cover up to $300 and unlimited requests</div></div><div class='btn'>$4.99 a month</div><div class='note' style='text-align:center'>Cancel any time in Settings.</div>"
+    }
+  ]
+}

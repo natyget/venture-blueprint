@@ -1,0 +1,198 @@
+{
+  "version": 1,
+  "note": "The canonical department roster. new_plan.py writes one section per department into plan/departments.md and check_plan.py checks every one is present and complete, or marked not applicable with a reason. Tool names are deliberately absent: they go stale, so each plan chooses concrete tools with verified prices at the time it is written.",
+  "departments": [
+    {
+      "id": "D01",
+      "name": "Product",
+      "lens": "Builds for the job the customer is hiring the product to do, not for the feature list. Sees the roadmap as a sequence of bets, each with a way to know if it paid off.",
+      "asks": [
+        "How do we hear from customers every week, not only when something breaks?",
+        "What is the one metric that tells us the core loop works, and who looks at it when?",
+        "How do we decide what not to build, and who can overrule it?",
+        "Where does feedback from support, sales and reviews land, and who reads it?"
+      ],
+      "tooling": ["feedback capture", "roadmap and decision log", "user research scheduling", "feature flags"]
+    },
+    {
+      "id": "D02",
+      "name": "Engineering",
+      "lens": "Thinks about the second year of the codebase on the first day: environments, release safety, review, and how the team will change things without fear.",
+      "asks": [
+        "How does a change get from a laptop to production, and how is it undone?",
+        "What runs in CI, and what blocks a merge?",
+        "Who gets paged when production breaks, and what do they see first?",
+        "What is the budget for tech debt, and how is it spent rather than promised?"
+      ],
+      "tooling": ["source control and CI/CD", "hosting and environments", "observability and error tracking", "on-call and status page"]
+    },
+    {
+      "id": "D03",
+      "name": "Design and brand",
+      "lens": "Consistency comes from one source of truth that every surface reads, not from taste. Owns everything a user sees, including link previews, emails and store screenshots.",
+      "asks": [
+        "Where do the design tokens live, and what stops a surface from hardcoding a value?",
+        "Who signs off on a screen, and against what checklist?",
+        "Which assets are generated, and which would rot if made by hand?",
+        "How is accessibility checked before release, not after a complaint?"
+      ],
+      "tooling": ["design files and component library", "token pipeline", "asset rendering", "accessibility checks"]
+    },
+    {
+      "id": "D04",
+      "name": "Data and analytics",
+      "lens": "A number nobody trusts is worse than no number. Owns the event contract, the warehouse and the handful of metrics the company runs on.",
+      "asks": [
+        "Where does raw event data land, and can we query it ourselves in a year?",
+        "Which events are authoritative from the server and which from clients?",
+        "Who defines a metric, and where is the definition written?",
+        "How do we run an experiment and know the answer is real?"
+      ],
+      "tooling": ["product analytics", "data warehouse", "dashboards", "experimentation"]
+    },
+    {
+      "id": "D05",
+      "name": "Security and privacy engineering",
+      "lens": "Assumes the breach and plans the blast radius. Knows that the first enterprise customer will send a security questionnaire, and that the answers have to be true.",
+      "asks": [
+        "What is the threat model: who would attack this, and what would they want?",
+        "Who has access to production data, and how is that logged and reviewed?",
+        "What happens in the first hour of an incident, and who decides to notify users?",
+        "When will a customer first ask for a security certification, and what does reaching it require?"
+      ],
+      "tooling": ["secrets management", "access control and SSO", "dependency and secret scanning", "backups and restore testing"]
+    },
+    {
+      "id": "D06",
+      "name": "Marketing and content",
+      "lens": "Positioning before promotion. Knows which channel the business will live or die by, and builds the machine that feeds it rather than doing one-off pushes.",
+      "asks": [
+        "What do we say in one sentence, to whom, and how is it different from the alternative?",
+        "Which channel carries the first thousand customers, and what does it cost per customer?",
+        "What content do we produce every week, and who or what produces it?",
+        "How do we know which campaign produced which customer?"
+      ],
+      "tooling": ["website and CMS", "content production pipeline", "social scheduling", "email marketing", "attribution"]
+    },
+    {
+      "id": "D07",
+      "name": "Sales and partnerships",
+      "lens": "Revenue is a pipeline with stages and conversion rates, not a hope. Knows that the first ten deals are founder-led and that the process must be written before the first hire.",
+      "asks": [
+        "Who exactly is the ideal customer, and how do we find a hundred of them by name?",
+        "What are the stages from first contact to signed, and what moves a deal between them?",
+        "Who can discount, by how much, and what does the contract look like?",
+        "Which partners or integrations would bring customers we cannot reach alone?"
+      ],
+      "tooling": ["CRM", "outreach", "contracts and e-signature", "partner tracking"]
+    },
+    {
+      "id": "D08",
+      "name": "Customer success and support",
+      "lens": "Retention is decided in the first week of use. Knows the twenty questions every new customer will ask and answers them before they are asked.",
+      "asks": [
+        "What does a new customer have to do in their first week to stay, and how do we make sure they do it?",
+        "Where do customers ask for help, how fast do we answer, and who answers at 2am?",
+        "What can a customer fix themselves, and what needs us?",
+        "How does what support hears reach product, every week?"
+      ],
+      "tooling": ["help desk", "help center", "in-app messaging", "onboarding tracking"]
+    },
+    {
+      "id": "D09",
+      "name": "Trust and safety",
+      "lens": "Every feature that connects people is also a way for one of them to hurt another. Plans the abuse before the abuser finds it.",
+      "asks": [
+        "How could someone use this product to harm another person, and what stops them?",
+        "How does a user report something, and how fast does a human see it?",
+        "What do we do about fraud, fake accounts and scams, before and after the fact?",
+        "What happens when law enforcement or a lawyer asks for data?"
+      ],
+      "tooling": ["moderation queue", "automated screening", "fraud signals", "appeals and audit log"]
+    },
+    {
+      "id": "D10",
+      "name": "Operations",
+      "lens": "Owns everything that has to happen for the product to work that is not code: supply, vendors, fulfilment, and the runbooks for the day something fails.",
+      "asks": [
+        "What manual work happens every week to keep this running, and what breaks when volume doubles?",
+        "Which vendors do we depend on, and what is the plan if one disappears?",
+        "For a marketplace: how do we recruit, vet and keep the supply side?",
+        "Where are the runbooks, and has anyone actually followed one?"
+      ],
+      "tooling": ["ops console", "vendor management", "runbooks", "scheduling and task tracking"]
+    },
+    {
+      "id": "D11",
+      "name": "Finance and accounting",
+      "lens": "Cash is the only number that can end the company this month. Keeps the books clean enough that taxes, fundraising or a sale never stall on them.",
+      "asks": [
+        "Who keeps the books, monthly, and when do they close?",
+        "Which taxes do we file, where, and when — including sales tax on what we sell?",
+        "How many months of cash do we have, and who checks it every month?",
+        "Is the cap table, entity and banking set up so we could raise or sell without cleanup?"
+      ],
+      "tooling": ["accounting", "banking and cards", "payroll", "sales tax", "cap table"]
+    },
+    {
+      "id": "D12",
+      "name": "Legal and compliance",
+      "lens": "Cheapest at the design stage, most expensive after launch. Owns the register, the terms, the privacy program, IP and the contracts.",
+      "asks": [
+        "Which rules apply because of what we do, where we are, and who our users are?",
+        "Do our terms and privacy notice match what the product actually does?",
+        "Do we own our code, name, brand and content — including what contractors made?",
+        "Which decisions need a lawyer before launch, and what does that review cost?"
+      ],
+      "tooling": ["terms and privacy notice", "consent and data-request handling", "contract templates", "trademark monitoring"]
+    },
+    {
+      "id": "D13",
+      "name": "People and hiring",
+      "lens": "The first five hires set the culture by default. Plans who is needed when, at what cost, and what the founder stops doing as each one joins.",
+      "asks": [
+        "What will the founder stop doing first, and who takes it over?",
+        "At what customer count or revenue does each hire become necessary?",
+        "Contractor or employee — and what does the law say about the difference here?",
+        "How does a new person learn how things are done here without asking the founder?"
+      ],
+      "tooling": ["hiring pipeline", "contractor agreements with IP assignment", "payroll and benefits", "onboarding docs"]
+    },
+    {
+      "id": "D14",
+      "name": "Leadership and strategy",
+      "lens": "Decides what the company will not do. Owns the cadence that turns numbers into decisions, and the record of why each decision was made.",
+      "asks": [
+        "Which three numbers do we review every week, and what do we do when one moves?",
+        "Where is the record of decisions and their reasons?",
+        "What would make us change strategy, and how would we notice in time?",
+        "How does the founder spend their week, and is that the highest-value use of it?"
+      ],
+      "tooling": ["metrics review", "decision log", "investor or partner updates", "goal tracking"]
+    },
+    {
+      "id": "D15",
+      "name": "International and localization",
+      "lens": "Each new country is a new product: language, currency, payment rails, tax, law and culture. Decides what has to be true in the code before the first one, so the second is cheap.",
+      "asks": [
+        "Which country is next, and what is the trigger to enter it?",
+        "Are strings, currencies, dates and addresses ready for more than one locale today?",
+        "Which payment rails, tax registrations and local entities does each country need?",
+        "Who checks that the product makes sense in that culture, not just that language?"
+      ],
+      "tooling": ["translation management", "multi-currency payments", "local tax registration", "regional hosting"]
+    },
+    {
+      "id": "D16",
+      "name": "AI and automation",
+      "lens": "Treats models as a dependency with a cost, a failure rate and a supplier. Decides which work in every other department an agent can run, and how its output is checked.",
+      "asks": [
+        "Which product features use a model, what does each call cost, and what happens when it is wrong?",
+        "How do we test model output before shipping a change, and track quality after?",
+        "Which recurring work across departments can an agent do today, with what human check?",
+        "What user data reaches a model provider, and does the privacy notice say so?"
+      ],
+      "tooling": ["model provider", "evaluation and monitoring", "prompt and agent versioning", "cost tracking"]
+    }
+  ]
+}

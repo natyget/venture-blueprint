@@ -4,6 +4,20 @@ Consistency is not a matter of taste or discipline. It is a matter of whether th
 
 This phase produces three things: a written design language, tokens as code, and a generator for every image the product needs.
 
+## 0. Name and identity
+
+The name goes on the store listing, the domain, every link, every asset and the trademark filing. Changing it after launch costs all of those, so choose it here, before the asset pipeline exists.
+
+Generate eight to twelve candidates. For each, check and record with the date:
+
+- **Domain** — whether the `.com` (or the market's main extension) resolves or is parked; a DNS lookup and a registrar search take seconds.
+- **App stores** — search both stores for the name; a near-identical app in the same category is a rejection risk and a confusion problem.
+- **Handles** — the main social platforms for this audience.
+- **Trademark** — a search of the trademark register in the classes you will use (software and online services, typically), and a plain web search for the name plus the category. This is trap T22; mark it `counsel: required` in the compliance register if anything close turns up.
+- **Meaning** — how it reads in every language of the markets you plan to enter, and whether it's easy to say and spell after hearing it once.
+
+Shortlist three, recommend one, and let the founder choose. Then write the **voice** in three adjectives, each with one "we say" and one "we don't say" example, so copy in the app, the store listing and the emails all sound like the same company.
+
 ## 1. Research the look, then abstract it
 
 Collect references before deciding anything. Pull 15–25 screens from products whose audience overlaps yours, plus the platform's own first-party apps, which is what your users' expectations are actually calibrated against.

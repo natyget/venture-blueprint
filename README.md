@@ -1,110 +1,109 @@
 # Venture blueprint
 
-A Claude skill that plans a whole software product or company — from one idea, or from no idea at all — down to a build roadmap an agent can execute overnight.
+A Claude skill that plans a software product or company — from one idea, or from none — through brainstorm, plan and build, and shows you the result as an interactive site you can click through.
 
-It finds the problem worth solving from real evidence, tears down the competition, sizes the economics from countable units, builds a compliance register across federal, state and app-store rules, chooses the stack against named alternatives, derives a design language and a generated asset system, plans growth and multi-rail monetization, decides what to own in-house, then emits ordered build steps with anchors, risks, tests, gates and parallel session briefs.
+Say "make me millions" and it goes looking for problems people already pay to avoid. Give it an idea and it lays out two or three genuinely different ways to build it — each with its own numbers and app screens — so you can choose. Then it plans the chosen path the way a full founding team would: market, competitors, personas, projections in good and bad years, every department from sales to security, legal and app-store traps, design, growth, payments, and the cheapest experiments to test it before building. Only when you ask does it produce a build roadmap a fleet of Claude sessions can execute overnight.
 
-It is a method, not a business-plan template. The output is not a pitch deck — it is a plan precise enough that a build agent with no memory of the conversation can pick up any step and do it correctly, and precise enough that a validator can fail it.
+It is a method, not a template. Every claim carries a source and a date or is flagged as unverified, every number comes from a calculator rather than mental arithmetic, and a checker refuses a plan that skips the hard parts.
+
+**New to this? [INSTALL.md](INSTALL.md) walks through it in plain language.**
+
+See a finished example first: [examples/toolshare-demo](examples/toolshare-demo) — download `venture.html` and open it.
 
 ## Install
 
-Not technical? **[INSTALL.md](INSTALL.md)** walks through it in plain language.
-
-**As a plugin (recommended — you get updates):**
+**Claude Code, as a plugin** — recommended; you get updates. Type these in Claude Code, one at a time:
 
 ```
 /plugin marketplace add natyget/venture-blueprint
-/plugin install venture-blueprint
 ```
 
-**As a skill, for every project on your machine:**
+```
+/plugin install venture-blueprint@naty-skills
+```
+
+**Claude Code, by cloning.** Clone the repo and open Claude Code inside the folder — the skill is linked at `.claude/skills/` so it loads straight away. Plans you make there go in `ventures/`, which git ignores.
 
 ```bash
 git clone https://github.com/natyget/venture-blueprint.git
-ln -s "$PWD/venture-blueprint/plugins/venture-blueprint/skills/venture-blueprint" ~/.claude/skills/venture-blueprint
+cd venture-blueprint
+claude
 ```
 
-**As a skill, for one repository** (works in cloud sessions too): copy `plugins/venture-blueprint/skills/venture-blueprint` to `.claude/skills/venture-blueprint/` and commit it.
+To have it in every project instead, link it into your personal skills:
 
-**In the Claude app:** upload `dist/venture-blueprint.skill` as a custom skill. The scripts need Python 3 and nothing else, so they run anywhere, but Claude Code is the better home because the plan wants a filesystem.
+```bash
+ln -s "$PWD/plugins/venture-blueprint/skills/venture-blueprint" ~/.claude/skills/venture-blueprint
+```
+
+**Claude app.** Upload `dist/venture-blueprint.skill` in Settings → Capabilities → Skills.
 
 ## Use
 
-It works in three stages and **stops between them**, because founders brainstorm before they plan and plan before they build.
-
-1. **Explore.** Asks about you and your preferences in one batch, does a short evidence pass, then shows two or three genuinely different ways to do the idea — side by side, with a recommendation — and asks which one. A brainstorm can end here.
-2. **Plan.** Takes the path you chose to depth and assembles a business plan: executive summary, vision, mission and principles, customer personas, a competitor matrix, bottom-up market sizing, cost and revenue projections in three scenarios, how costs and revenue scale, compliance and app-store traps, and a statement of work. Then asks whether to build.
-3. **Build.** Only when you say so: an ordered build roadmap and briefs for running several Claude sessions overnight.
-
-Start by just describing the idea, or type `/venture-blueprint` followed by it:
+Just describe what you want. The skill switches itself on for planning requests, so there's no command to remember. To call it explicitly, type `/venture` and pick it from the menu — it's `/venture-blueprint` when installed as a skill, or `/venture-blueprint:venture-blueprint` as a plugin.
 
 - "I want to test an idea for market fit: an app where neighbours lend each other tools."
-- "Make me millions." — finding the problem is part of the job.
-- "Here's my product. What's missing?" — the same stages as a gap analysis.
+- "Make me millions."
+- "Here's my product. What's missing?"
+
+It works in three stages and **stops between them**:
+
+1. **Explore.** A batch of questions about you and your preferences, a short research pass, then two or three paths side by side — each with rough numbers and a few app screens — and a recommendation. A brainstorm can end here.
+2. **Plan.** The path you picked, in depth: a business plan with vision, mission, personas, competitor matrix, projections and a statement of work; every department's plan; the experiments to run first; the full clickable prototype.
+3. **Build.** Only when you ask: the step-by-step roadmap and the briefs for parallel build sessions.
+
+## The venture site
+
+At the end of each stage you get `plan/venture.html` — one page that opens in any browser, with nothing to install and nothing sent anywhere:
+
+- **Overview** — the verdict at a glance, the key numbers as tiles, three futures (bad, expected, great) and the app.
+- **Product** — a clickable prototype in an iPhone, Android or browser frame. Tap through it, or play a flow step by step.
+- **Numbers** — drag sliders for customers, churn, prices, costs and cash and watch every chart move; good and bad years as bars; which assumption the result depends on most; how cost and revenue scale.
+- **Paths** — the options side by side, each with its verdict.
+- **Plan, Company, Validation** — the documents, readable.
+- **Gaps** — everything unverified, unanswered or worrying, by severity.
+
+The page runs the same model as the Python scripts and checks itself against them when it opens.
 
 ## What you get
 
 ```
 plan/
-├── paths.md                 the options you chose between, and your preferences
-├── business-plan.md         the readable whole — the document you share
-├── 00-brief.md … 10-red-team.md   the phase documents behind it
+├── venture.html             the site — open this first
+├── business-plan.md         the readable whole
+├── paths/                   each path's assumptions, projections and screens
+├── paths.md                 the options and your preferences
+├── screens.json             the chosen product's clickable prototype
+├── departments.md           sixteen departments, each planned from its head's view
+├── validation.md            the riskiest assumptions and how to test them cheaply
+├── 00-brief.md … 10-red-team.md   the phase documents behind it all
 ├── assumptions.json         every input to the numbers, each with a source
-├── financials.md / .csv     projections from the model, never hand-computed
-├── traps.csv                24 fixed questions, every one answered
+├── financials.md / .csv     projections, never hand-computed
+├── traps.csv                24 fixed questions about rules that can sink you
 ├── compliance.csv, decisions.json
 └── roadmap.json, briefs/    only after the build stage
 ```
 
 ## The scripts
 
-No dependencies beyond the Python standard library.
+Standard-library Python only.
 
 ```bash
-python3 -I scripts/new_plan.py plan --name "Acme"       # scaffold every stage's files
-python3 -I scripts/model.py plan                         # assumptions -> projections
-python3 -I scripts/check_plan.py plan --stage plan      # check against the bar for that stage
+python3 -I scripts/new_plan.py plan --name "Acme"     # scaffold every stage's files
+python3 -I scripts/model.py plan                       # assumptions -> projections
+python3 -I scripts/build_site.py plan                  # the venture site
+python3 -I scripts/check_plan.py plan --stage plan     # check the plan for that stage
 python3 -I scripts/parallel_brief.py plan --out plan/briefs
 ```
 
-`model.py` turns sourced assumptions into month-by-month cost, revenue and cash across three scenarios, plus a cost-at-scale table, so no projection is ever computed by hand.
+`check_plan.py` checks only what the current stage should have produced. It fails on unanswered traps, departments left blank, experiments without thresholds, broken prototype links, unsourced assumptions, financials stale against their inputs, untestable build steps, and two parallel sessions claiming one file.
 
-`check_plan.py` checks only what the current stage should have produced. It fails on unanswered traps, unsourced assumptions, financials that no longer match their inputs, steps with no runnable test, compliance rows pointing at nothing, decisions with no rejected alternatives, dependency cycles, user-facing features with no measurement, concurrent workstreams fighting over a file, and leftover placeholders. It fails on a fresh scaffold by design — it is a worklist before it is a gate.
-
-`parallel_brief.py` refuses to generate briefs when two workstreams that could run at the same time claim the same file, and reports the critical path in hours, which is what one night actually reaches.
-
-## The eleven phases
-
-Each ends with a gate — a question you must answer from written evidence, not impression.
-
-| Phase | Gate |
-|---|---|
-| Intake and problem finding | Can you name one person with this problem, in their own quoted words, from a source with a URL and a date? |
-| Competition and the gap | For 3+ incumbents: price, acquisition channel, top complaint in their users' words. Which gap is structural? |
-| Economics | Does the bottom-up count clear the cost base? Is cash-to-first-dollar inside runway? |
-| Compliance and platform policy | Does every triggered rule have an implementing step and a named evidence artifact? |
-| Architecture | Is every layer chosen against named alternatives, with cost at 1k/100k/1M and a performance budget? |
-| Design language | Do tokens exist as code, does contrast pass, and does every link type have a generated image? |
-| Growth | Is there one loop whose k-factor or payback you can compute, and does every feature have its event? |
-| Monetization | Is the price anchored to researched willingness to pay, and is each corridor's rail named with its KYC reality? |
-| Ecosystem and in-house tools | For every step from problem to money: who owns it, and is absorbing it justified? |
-| Roadmap | Does every step have an anchor, a risk, a test and a revert? Is the cut line written? |
-| Red team | What kills this in six months, what is unverified, and what cannot be undone? |
-
-## The trap sweep
-
-Running through every phase is a fixed list of 24 questions whose answers are free now and expensive later — the ones where a third party's rule quietly decides your margin or your legality and nothing in your own code mentions it. Is each revenue line consumed in the app or in the world (because that decides whether a store takes a cut of it)? Does a minor signing up attach duties you did not know about? Do you ever hold someone else's money, even briefly? Does a transitive dependency's licence conflict with how you ship?
-
-Judgement finds the traps you can imagine. A fixed checklist finds the ones you can't — so the list is fixed, `traps.csv` has no blanks, and "not applicable" has to carry a reason.
-
-## The one idea worth keeping
-
-A plan is a set of claims, and a claim without a dated source is a liability. Prices, platform commissions, legal status and library APIs all move. A plan that states a number confidently and wrongly is worse than one that says "unverified, check here" — because the wrong number gets built on, priced on, and filed on.
+For contributors: `python3 -I tests/test_model_parity.py` checks the site's JavaScript model against `model.py`, value by value (needs Node).
 
 ## Not legal, tax or investment advice
 
-The compliance phase produces a register for a licensed attorney in the relevant jurisdiction to review. It is a research and planning aid, not a substitute for professional advice, and the skill is written to say so in its own output.
+The compliance work produces a register for a licensed attorney to review, and the skill says so in its own output.
 
 ## Licence
 
-MIT. See `LICENSE` — set the copyright holder to your own name before publishing.
+MIT.

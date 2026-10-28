@@ -1,0 +1,74 @@
+{
+  "path": "A \u00b7 Consumer app",
+  "summary": "Neighbours lend tools to each other; free to use, paid tier for insurance and unlimited lending.",
+  "customers": {
+    "label": "members",
+    "new_first_month": 60,
+    "new_growth_monthly": 0.12,
+    "new_max_per_month": 4000,
+    "churn_monthly": 0.08,
+    "cac": 9,
+    "source": "UNVERIFIED: rough Stage 1 estimate for comparison only"
+  },
+  "revenue_lines": [
+    {
+      "name": "Plus membership",
+      "kind": "subscription",
+      "price": 4.99,
+      "attach_rate": 0.06,
+      "store_commission": 0.15,
+      "source": "UNVERIFIED: rough Stage 1 estimate for comparison only; sold in-app, so store commission applies"
+    }
+  ],
+  "variable_costs": [
+    {
+      "name": "Insurance pool",
+      "pct_of_revenue": 0.18,
+      "source": "UNVERIFIED: rough Stage 1 estimate for comparison only"
+    },
+    {
+      "name": "Infra",
+      "per_customer_month": 0.05,
+      "source": "UNVERIFIED: rough Stage 1 estimate for comparison only"
+    }
+  ],
+  "fixed_costs": [
+    {
+      "name": "Hosting and tools",
+      "monthly": 150,
+      "steps": [
+        {
+          "at_customers": 2000,
+          "monthly": 900
+        }
+      ],
+      "source": "UNVERIFIED: rough Stage 1 estimate for comparison only"
+    },
+    {
+      "name": "Legal and accounting",
+      "monthly": 300,
+      "source": "UNVERIFIED: rough Stage 1 estimate for comparison only"
+    },
+    {
+      "name": "Founder draw",
+      "monthly": 3000,
+      "start_month": 10,
+      "source": "Founder, this conversation"
+    },
+    {
+      "name": "Community and support",
+      "monthly": 0,
+      "steps": [
+        {
+          "at_customers": 5000,
+          "monthly": 3500
+        }
+      ],
+      "source": "UNVERIFIED: rough Stage 1 estimate for comparison only"
+    }
+  ],
+  "venture": "ToolShare",
+  "currency": "USD",
+  "months": 36,
+  "starting_cash": 12000
+}

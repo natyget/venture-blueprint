@@ -1,0 +1,63 @@
+{
+  "platform": "ios",
+  "tokens": {
+    "bg": "#f4f4f1",
+    "surface": "#ffffff",
+    "text": "#15171a",
+    "muted": "#7a7d82",
+    "accent": "#2f7d5b",
+    "accent_fg": "#ffffff",
+    "border": "rgba(21,23,26,0.12)",
+    "radius": 12
+  },
+  "start": "home",
+  "flows": [
+    { "name": "A resident borrows a drill", "steps": ["home", "tool", "reserve", "confirm"] },
+    { "name": "Checking what's out", "steps": ["home", "loans"] },
+    { "name": "The building manager's view", "steps": ["home", "manager"] }
+  ],
+  "screens": [
+    {
+      "id": "home",
+      "title": "Library",
+      "for": "a resident looking for a tool",
+      "notes": "The whole value in one screen: what's in the building and what's free right now. Availability is the first thing shown because 'is it here?' is the question every resident has.",
+      "html": "<div class='title'>Tool library</div><div class='sub'>Building 401 · 38 tools · 6 out today</div><div class='search'><i data-i='search'></i>Search drills, ladders, saws</div><div class='chips'><span class='chip on'>All</span><span class='chip'>Power tools</span><span class='chip'>Garden</span><span class='chip'>Moving</span><span class='chip'>Cleaning</span></div><div class='section-h'>Available now</div><div class='list'><div class='row' data-go='tool'><div class='ic'><i data-i='tool'></i></div><div class='tx'><div class='t'>Cordless drill</div><div class='s'>Locker 3 · 4.9 · 41 loans</div></div><div class='r'><span class='badge'>Free</span><i data-i='chevron-right'></i></div></div><div class='row'><div class='ic' style='background:#c47a2c'><i data-i='tool'></i></div><div class='tx'><div class='t'>Ladder, 6 ft</div><div class='s'>Storage room · 4.7</div></div><div class='r'><span class='badge'>Free</span><i data-i='chevron-right'></i></div></div><div class='row'><div class='ic' style='background:#3f6fd8'><i data-i='tool'></i></div><div class='tx'><div class='t'>Carpet cleaner</div><div class='s'>Locker 5 · 4.8</div></div><div class='r'>$8 / day<i data-i='chevron-right'></i></div></div><div class='row'><div class='ic' style='background:#8a5cd6'><i data-i='tool'></i></div><div class='tx'><div class='t'>Moving dolly</div><div class='s'>Loading dock</div></div><div class='r'><span class='badge'>Free</span><i data-i='chevron-right'></i></div></div></div><div class='section-h'>Your loans</div><div class='list'><div class='row' data-go='loans'><div class='ic' style='background:#5b6cff'><i data-i='clock'></i></div><div class='tx'><div class='t'>Pressure washer</div><div class='s'>Return by Sat 6 pm</div></div><div class='r'><i data-i='chevron-right'></i></div></div></div><div class='tabbar'><div class='tab on'><i data-i='home'></i>Library</div><div class='tab' data-go='loans'><i data-i='calendar'></i>Loans</div><div class='tab' data-go='manager'><i data-i='chart'></i>Manage</div><div class='tab'><i data-i='user'></i>Profile</div></div>"
+    },
+    {
+      "id": "tool",
+      "title": "Tool",
+      "for": "a resident deciding whether to borrow",
+      "notes": "Trust signals before commitment: how often it's been borrowed and how people rated it. The damage line answers the worry that stops people borrowing at all.",
+      "html": "<div class='bar'><span class='a' data-back><i data-i='chevron-left'></i>Library</span><span class='t'></span><span class='a r'><i data-i='share'></i></span></div><div class='img hero'>Cordless drill · 18V</div><div class='h'>Cordless drill</div><div class='sub'>18V drill with two batteries and a 30-piece bit set. Kept in locker 3 in the lobby.</div><div class='grid2'><div class='card stat'><div class='k'>Loans</div><div class='v'>41</div></div><div class='card stat'><div class='k'>Rating</div><div class='v'>4.9</div></div></div><div class='section-h'>Next available</div><div class='chips'><span class='chip on'>Today</span><span class='chip'>Tomorrow</span><span class='chip'>Sat</span><span class='chip'>Sun</span></div><div class='btn' data-go='reserve'>Reserve</div><div class='note'>Free for residents. Damage over $25 is covered by the building's deposit pool, not by you.</div>"
+    },
+    {
+      "id": "reserve",
+      "title": "Reserve",
+      "for": "a resident committing to a time",
+      "notes": "Three facts and one button. No account details, no payment for free tools: the fewer fields here, the more loans happen.",
+      "html": "<div class='bar'><span class='a' data-back><i data-i='chevron-left'></i>Back</span><span class='t'>Reserve</span><span class='a r'></span></div><div class='section-h'>When</div><div class='list'><div class='row'><div class='tx'><div class='t'>Pick up</div></div><div class='r'>Today, 6:00 pm</div></div><div class='row'><div class='tx'><div class='t'>Return by</div></div><div class='r'>Tomorrow, 6:00 pm</div></div></div><div class='section-h'>Where</div><div class='list'><div class='row'><div class='ic'><i data-i='lock'></i></div><div class='tx'><div class='t'>Locker 3, lobby</div><div class='s'>Opens with a one-time code</div></div></div></div><div class='section-h'>Cost</div><div class='list'><div class='row'><div class='tx'><div class='t'>Loan</div></div><div class='r'>Free</div></div><div class='row'><div class='tx'><div class='t'>Deposit hold</div></div><div class='r'>None</div></div></div><div class='btn' data-go='confirm'>Confirm reservation</div>"
+    },
+    {
+      "id": "confirm",
+      "title": "Confirmed",
+      "for": "a resident about to walk to the locker",
+      "notes": "The code is the only thing they need, so it is the biggest thing on the screen.",
+      "html": "<div class='done'><div class='ok'><i data-i='check'></i></div><div class='h' style='padding:0'>You're all set</div><div class='sub' style='padding:0'>Cordless drill · today at 6:00 pm</div></div><div class='code'>4 8 2 7</div><div class='note' style='text-align:center'>Enter this at locker 3. It works once.</div><div class='btn' data-go='home'>Done</div><div class='btn ghost' data-go='loans'>See my loans</div>"
+    },
+    {
+      "id": "loans",
+      "title": "Loans",
+      "for": "a resident with something out",
+      "notes": "Return is one tap from the list, because late returns are what make the library run out.",
+      "html": "<div class='title'>Loans</div><div class='section-h'>Out now</div><div class='list'><div class='row'><div class='ic' style='background:#5b6cff'><i data-i='clock'></i></div><div class='tx'><div class='t'>Pressure washer</div><div class='s'>Return by Sat 6 pm · Locker 5</div></div><span class='btn sm'>Return</span></div></div><div class='section-h'>History</div><div class='list'><div class='row'><div class='ic' style='background:#9aa0a6'><i data-i='check'></i></div><div class='tx'><div class='t'>Ladder, 6 ft</div><div class='s'>Returned Oct 19</div></div></div><div class='row'><div class='ic' style='background:#9aa0a6'><i data-i='check'></i></div><div class='tx'><div class='t'>Moving dolly</div><div class='s'>Returned Oct 4</div></div></div></div><div class='tabbar'><div class='tab' data-go='home'><i data-i='home'></i>Library</div><div class='tab on'><i data-i='calendar'></i>Loans</div><div class='tab' data-go='manager'><i data-i='chart'></i>Manage</div><div class='tab'><i data-i='user'></i>Profile</div></div>"
+    },
+    {
+      "id": "manager",
+      "title": "Manager",
+      "for": "the building manager who pays for it",
+      "notes": "The buyer is not the user. This screen is what renews the subscription: proof that residents use it, and the two things that need a person.",
+      "html": "<div class='title'>Building 401</div><div class='sub'>This month</div><div class='grid2'><div class='card stat'><div class='k'>Loans</div><div class='v'>126</div></div><div class='card stat'><div class='k'>Residents using it</div><div class='v'>58%</div></div><div class='card stat'><div class='k'>Average rating</div><div class='v'>4.8</div></div><div class='card stat'><div class='k'>Needs attention</div><div class='v'>2</div></div></div><div class='section-h'>Needs attention</div><div class='list'><div class='row'><div class='ic' style='background:#e5484d'><i data-i='alert'></i></div><div class='tx'><div class='t'>Ladder, 6 ft</div><div class='s'>Reported wobbly hinge · 2 days ago</div></div><div class='r'><i data-i='chevron-right'></i></div></div><div class='row'><div class='ic' style='background:#d98a1f'><i data-i='clock'></i></div><div class='tx'><div class='t'>Carpet cleaner</div><div class='s'>1 day overdue · Unit 5C</div></div><div class='r'><i data-i='chevron-right'></i></div></div></div><div class='btn ghost'>Add a tool</div><div class='tabbar'><div class='tab' data-go='home'><i data-i='home'></i>Library</div><div class='tab' data-go='loans'><i data-i='calendar'></i>Loans</div><div class='tab on'><i data-i='chart'></i>Manage</div><div class='tab'><i data-i='user'></i>Profile</div></div>"
+    }
+  ]
+}

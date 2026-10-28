@@ -16,9 +16,12 @@ Exit 1 if there are errors. Warnings do not fail the run.
 """
 
 import argparse
+import contextlib
 import csv
 import datetime as dt
 import hashlib
+import importlib.util
+import io
 import json
 import re
 import sys
@@ -41,8 +44,10 @@ DOCS = {
     "10-red-team.md": ["did not verify", "kill"],
     "business-plan.md": ["executive summary", "vision", "mission", "principles",
                          "persona", "anti-persona", "market", "competitor matrix",
-                         "financial", "statement of work", "milestones",
-                         "unverified"],
+                         "financial", "organization", "statement of work",
+                         "milestones", "long-term", "unverified"],
+    "departments.md": ["cross-functional"],
+    "validation.md": ["riskiest", "experiment", "pass", "kill", "results"],
 }
 # Once the founder has chosen, paths.md must record the choice and its reasons.
 CHOSEN_EXTRA = {"paths.md": ["choice", "constraint", "rejected"]}
@@ -50,7 +55,7 @@ CHOSEN_EXTRA = {"paths.md": ["choice", "constraint", "rejected"]}
 PLAN_DOCS = ["00-brief.md", "paths.md", "01-wedge.md", "02-economics.md",
              "03-compliance.md", "04-architecture.md", "05-design-language.md",
              "06-growth.md", "07-monetization.md", "08-ecosystem.md",
-             "10-red-team.md", "business-plan.md"]
+             "departments.md", "validation.md", "10-red-team.md", "business-plan.md"]
 STAGE_DOCS = {
     "explore": ["00-brief.md", "paths.md"],
     "plan": PLAN_DOCS,
@@ -232,6 +237,116 @@ def check_model(plan, rep):
         rep.error("financials.md", "stale — assumptions.json changed after "
                                    "model.py last ran. Rerun it so every figure "
                                    "in the plan agrees")
+
+
+def load_script(name):
+    spec = importlib.util.spec_from_file_location(f"vb_{name}", SKILL / "scripts" / f"{name}.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+DEPT_LABELS = ["what breaks first", "day one", "stack", "who", "agents can run", "kpi"]
+
+
+def check_departments(plan, rep):
+    path = plan / "departments.md"
+    if not path.exists():
+        return  # reported by check_docs
+    text = re.sub(r"<!--.*?-->", "", path.read_text(encoding="utf-8"), flags=re.S)
+    try:
+        roster = json.loads((SKILL / "templates" / "departments.json")
+                            .read_text(encoding="utf-8"))["departments"]
+    except (OSError, json.JSONDecodeError, KeyError):
+        roster = []
+    for d in roster:
+        m = re.search(r"(?ms)^##\s+" + re.escape(d["id"]) + r"\b[^\n]*\n(.*?)(?=^## |\Z)", text)
+        where = f"departments.md/{d['id']}"
+        if not m:
+            rep.error(where, f"{d['name']}: section missing — every department is "
+                             "planned or marked not applicable with a reason")
+            continue
+        body = m.group(1).lower()
+        if "not applicable" in body:
+            if len(body.strip()) < 60:
+                rep.error(where, f"{d['name']}: not applicable needs the reason")
+            elif not re.search(r"\b(until|revisit|when|once|if)\b", body):
+                rep.warn(where, f"{d['name']}: not applicable with no trigger to revisit")
+            continue
+        for label in DEPT_LABELS:
+            if label not in body:
+                rep.error(where, f'{d["name"]}: missing "{label}"')
+
+
+def check_screens(path, label, required, rep):
+    if not path.exists():
+        if required:
+            rep.error(path.name, "missing — the core loop is drawn as a clickable "
+                                 "prototype (references/product-preview.md)")
+        else:
+            rep.warn(path.name, f"no screens for {label} — the paths are easier to "
+                                "choose between when each can be seen")
+        return
+    problems = []
+    site = load_script("build_site")
+    data = site.load_screens(path, label, problems)
+    for pr in problems:
+        rep.error(path.name, pr["title"])
+    if data is None:
+        rep.error(path.name, "no screens in the file")
+        return
+    if required and len(data["screens"]) < 3:
+        rep.error(path.name, f"only {len(data['screens'])} screen(s) — draw the whole "
+                             "core loop, the buyer's screen and the money moment")
+    if required and not data["flows"]:
+        rep.warn(path.name, "no flows — add one per job a persona does")
+
+
+def check_paths_dir(plan, rep):
+    pdir = plan / "paths"
+    files = sorted(f for f in pdir.glob("*.json")
+                   if not f.name.endswith(".screens.json")) if pdir.is_dir() else []
+    if len(files) < 2:
+        rep.error("paths/", f"{len(files)} path file(s) — compare at least two genuinely "
+                            "different paths, each with its own assumptions")
+    model = load_script("model")
+    for f in files:
+        raw = f.read_text(encoding="utf-8")
+        if "TODO" in raw:
+            rep.error(f"paths/{f.name}", "still has TODO markers")
+            continue
+        try:
+            a = json.loads(raw)
+        except json.JSONDecodeError as exc:
+            rep.error(f"paths/{f.name}", f"invalid JSON: {exc}")
+            continue
+        buf = io.StringIO()
+        try:
+            with contextlib.redirect_stderr(buf):
+                model.validate(a)
+        except SystemExit:
+            rep.error(f"paths/{f.name}", buf.getvalue().strip().replace("error: ", "") or "invalid")
+            continue
+        missing = [n for n, b in ([("customers", a.get("customers"))]
+                                  + [(l.get("name", "?"), l) for l in a.get("revenue_lines", [])])
+                   if source_state(b) == "missing"]
+        if missing:
+            rep.error(f"paths/{f.name}", f"no source on: {', '.join(missing)} — "
+                                         "UNVERIFIED with a reason is fine at this stage")
+        check_screens(f.with_name(f"{f.stem}.screens.json"),
+                      a.get("path") or f.stem, False, rep)
+
+
+def check_site(plan, rep):
+    page = plan / "venture.html"
+    if not page.exists():
+        rep.warn("venture.html", "missing — run build_site.py so the founder can click "
+                                 "through the plan")
+        return
+    m = re.search(r"vb-inputs:\s*([0-9a-f]+)", page.read_text(encoding="utf-8")[:2000])
+    if not m or m.group(1) != load_script("build_site").inputs_digest(plan):
+        rep.warn("venture.html", "older than the plan files — rerun build_site.py so "
+                                 "the founder isn't looking at stale numbers")
 
 
 def reachable(steps_by_id):
@@ -597,7 +712,11 @@ def main():
         if roadmap:
             steps_by_id = check_roadmap(roadmap, rep)
 
+    if stage == "explore":
+        check_paths_dir(plan, rep)
     if stage in ("plan", "build"):
+        check_departments(plan, rep)
+        check_screens(plan / "screens.json", "the chosen plan", True, rep)
         check_model(plan, rep)
         check_compliance(plan / "compliance.csv", set(steps_by_id), building, rep)
         check_traps(plan / "traps.csv", set(steps_by_id), building, rep)
@@ -608,6 +727,8 @@ def main():
         decisions = load_json(plan / "decisions.json", rep, required=False)
         if decisions and decisions.get("decisions"):
             check_decisions(decisions, rep)
+
+    check_site(plan, rep)
 
     if rep.errors:
         print(f"\n{len(rep.errors)} error(s) — fix these before handing over:\n")

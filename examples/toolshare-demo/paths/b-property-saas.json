@@ -1,0 +1,81 @@
+{
+  "path": "B \u00b7 Software for property managers",
+  "summary": "Buildings get a shared tool library tenants book through an app; the manager pays per building.",
+  "customers": {
+    "label": "buildings",
+    "new_first_month": 3,
+    "new_growth_monthly": 0.09,
+    "new_max_per_month": 60,
+    "churn_monthly": 0.02,
+    "cac": 650,
+    "source": "UNVERIFIED: rough Stage 1 estimate for comparison only; founder-led sales, ~6 hours per closed building"
+  },
+  "revenue_lines": [
+    {
+      "name": "Per-building subscription",
+      "kind": "subscription",
+      "price": 149,
+      "source": "UNVERIFIED: rough Stage 1 estimate for comparison only; anchored to amenity software prices"
+    },
+    {
+      "name": "Setup and tool kit",
+      "kind": "one_time",
+      "price": 400,
+      "attach_rate": 0.7,
+      "processing_pct": 0.029,
+      "source": "UNVERIFIED: rough Stage 1 estimate for comparison only"
+    }
+  ],
+  "variable_costs": [
+    {
+      "name": "Tool wear and replacement",
+      "per_customer_month": 18,
+      "source": "UNVERIFIED: rough Stage 1 estimate for comparison only"
+    },
+    {
+      "name": "Infra",
+      "per_customer_month": 3,
+      "source": "UNVERIFIED: rough Stage 1 estimate for comparison only"
+    }
+  ],
+  "fixed_costs": [
+    {
+      "name": "Hosting and tools",
+      "monthly": 150,
+      "steps": [
+        {
+          "at_customers": 2000,
+          "monthly": 900
+        }
+      ],
+      "source": "UNVERIFIED: rough Stage 1 estimate for comparison only"
+    },
+    {
+      "name": "Legal and accounting",
+      "monthly": 300,
+      "source": "UNVERIFIED: rough Stage 1 estimate for comparison only"
+    },
+    {
+      "name": "Founder draw",
+      "monthly": 3000,
+      "start_month": 10,
+      "source": "Founder, this conversation"
+    },
+    {
+      "name": "Onboarding hire",
+      "monthly": 0,
+      "steps": [
+        {
+          "at_customers": 80,
+          "monthly": 4000
+        }
+      ],
+      "source": "UNVERIFIED: rough Stage 1 estimate for comparison only"
+    }
+  ],
+  "venture": "ToolShare",
+  "currency": "USD",
+  "months": 36,
+  "starting_cash": 12000,
+  "recommended": true
+}

@@ -75,7 +75,7 @@ A short version of `paths.md`: the options, the one chosen, why, and the founder
 
 ### 9. Product
 
-The MVP: what's in it, and explicitly what isn't and why. The core loop in a few steps. What makes it defensible (the data, the network, the closed loop from `08-ecosystem.md`). The expansion after the wedge.
+The MVP: what's in it, and explicitly what isn't and why. The core loop in a few steps — and point to the clickable prototype in the venture site (from `screens.json`), which shows it better than any description. What makes it defensible (the data, the network, the closed loop from `08-ecosystem.md`). The expansion after the wedge.
 
 ### 10. Business model and pricing
 
@@ -96,11 +96,15 @@ From `financials.md`, which `scripts/model.py` produces. Do not compute any figu
 
 The first fifty customers by name or place, then the channel that scales, the loop and its arithmetic, and the launch sequence from `06-growth.md`.
 
-### 13. Compliance and risk
+### 13. Organization
+
+From `departments.md`: who does what at launch (founder, agents, contractors), the hiring sequence with the trigger for each hire, and the monthly cost of the team at each stage — the same figures that are in the model. Where an agent runs a function a bootstrapped company would otherwise hire for, say so and say what human check it needs.
+
+### 14. Compliance and risk
 
 The obligations that apply and how each is met or designed away, the trap-sweep findings that changed a decision, the rows needing a lawyer, the concentration risks and the kill scenarios from `10-red-team.md`. State plainly that this is not legal advice.
 
-### 14. Statement of work
+### 15. Statement of work
 
 What will be built, by whom, by when, and how you'll know it's done. Useful whether the builder is the founder, a set of Claude sessions, or a contractor — and if it's a contractor, this section is what you'd hand them.
 
@@ -113,11 +117,19 @@ What will be built, by whom, by when, and how you'll know it's done. Useful whet
 - **Assumptions and exclusions**: what the plan takes as given, and what it deliberately doesn't cover.
 - **Change control**: how scope changes get decided, so the plan doesn't drift by accretion.
 
-### 15. Milestones and metrics
+### 16. Milestones and metrics
 
 For each stage of the company — validation, launch, traction, scale — the one or two metrics that matter and the target that means "move to the next stage". Make them falsifiable: "20 organizers with at least one paid event in 60 days", not "strong early traction".
 
-### 16. What is unverified and what's next
+### 17. Long-term path
+
+Where this goes if the wedge works — the part the founder said they wanted planned "to late stages":
+
+- **The expansion sequence**: wedge → the next one or two adjacent jobs (from `01-wedge.md`) → what the company becomes if those work. Each step with the trigger that says it's time.
+- **The moat at each stage**: what makes the company harder to copy as it grows — data, network, switching cost, the closed loop from `08-ecosystem.md`. Be honest where there is none yet.
+- **How it ends**: a profitable private company, an acquisition, or a venture-scale outcome. For an acquisition, name the *kinds* of company that would buy it and why — what gap of theirs it fills. Each ending implies different decisions now (capital, what to own, what data to keep clean), so say which the founder is aiming for and what follows from that.
+
+### 18. What is unverified and what's next
 
 Every `UNVERIFIED` claim and who can settle it; what you could not test and why; the three decisions most worth challenging; and the next action.
 
