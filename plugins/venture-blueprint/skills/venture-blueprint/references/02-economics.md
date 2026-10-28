@@ -66,6 +66,10 @@ This phase produces the *constraints* on price; Phase 7 sets the actual model.
 
 Price inside that band, closer to the value basis than to the floor. Note the switching cost you must overcome — data migration, retraining, contract timing — because that is paid in product work or in discount, and it belongs in the roadmap either way.
 
+## Run the numbers through the model
+
+Write every assumption from this phase into `plan/assumptions.json` — customers, each revenue line, variable and fixed costs, with a source or an `UNVERIFIED` marker on each — and run `scripts/model.py`. It produces the scenarios, break-even month, cash low point, unit economics and the cost-at-scale table in `financials.md`. Quote those figures; do not compute them yourself. If a number here and a number in `financials.md` disagree, the model is right and the prose is stale. `templates/assumptions.example.json` shows the shape, including step costs for the cliffs in §3.
+
 ## Output of this phase
 
 Write `plan/02-economics.md` with: the bottom-up chain with sources; the unit economics table with its sensitivity row; the cost base at three scales with cliffs flagged; the bootstrap test and the fix you chose; and the pricing band. Put the key numbers in `decisions.json` so later phases and the validator can see them.

@@ -1,7 +1,7 @@
 {
   "$schema": "https://www.schemastore.org/claude-code-marketplace.json",
   "name": "naty-skills",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Skills for planning and building software products end to end.",
   "owner": {
     "name": "Naty"
@@ -10,8 +10,8 @@
     {
       "name": "venture-blueprint",
       "source": "./plugins/venture-blueprint",
-      "version": "1.0.0",
-      "description": "Plans a whole software product or company from one idea, or from none, down to a build roadmap an agent can execute overnight: wedge, economics, compliance, architecture, design language, growth, monetization, in-house tooling, ordered build steps and parallel session briefs.",
+      "version": "1.1.0",
+      "description": "Plans a software product or company from a rough idea, or none, in three stages that stop between them: brainstorm two or three paths and learn your preferences; a full business plan with vision, personas, competitor matrix, projections and a statement of work; then, when asked, a build roadmap.",
       "category": "planning",
       "license": "MIT",
       "keywords": [

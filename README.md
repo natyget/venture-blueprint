@@ -30,25 +30,30 @@ ln -s "$PWD/venture-blueprint/plugins/venture-blueprint/skills/venture-blueprint
 
 ## Use
 
-Start a session and say any of:
+It works in three stages and **stops between them**, because founders brainstorm before they plan and plan before they build.
 
-- "Plan out an app that lets neighbours share tools." It runs all eleven phases.
-- "Make me millions." Finding the problem is part of the job — it mines evidence and comes back with three scored candidates and a recommendation.
-- "Here's my repo. What's missing?" Same phases, run as a gap analysis.
-- "Plan the monetization and payment rails for this, including Kenya and Ethiopia."
-- "Is this a good idea?" It tries to kill the idea first, in writing, then tells you whether it survived.
+1. **Explore.** Asks about you and your preferences in one batch, does a short evidence pass, then shows two or three genuinely different ways to do the idea — side by side, with a recommendation — and asks which one. A brainstorm can end here.
+2. **Plan.** Takes the path you chose to depth and assembles a business plan: executive summary, vision, mission and principles, customer personas, a competitor matrix, bottom-up market sizing, cost and revenue projections in three scenarios, how costs and revenue scale, compliance and app-store traps, and a statement of work. Then asks whether to build.
+3. **Build.** Only when you say so: an ordered build roadmap and briefs for running several Claude sessions overnight.
 
-Expect to be shown the wedge and the candidate problems **before** ten documents get written — that redirect costs one message, and skipping it costs a rewrite.
+Start by just describing the idea, or type `/venture-blueprint` followed by it:
+
+- "I want to test an idea for market fit: an app where neighbours lend each other tools."
+- "Make me millions." — finding the problem is part of the job.
+- "Here's my product. What's missing?" — the same stages as a gap analysis.
 
 ## What you get
 
 ```
 plan/
-├── 00-brief.md … 10-red-team.md    one document per phase
-├── decisions.json                   every choice, its rejected alternatives, and why
-├── compliance.csv                   feature → rule → requirement → step → evidence
-├── roadmap.json                     ordered steps with anchors, risks, tests, file sets
-└── briefs/                          one self-contained build brief per workstream
+├── paths.md                 the options you chose between, and your preferences
+├── business-plan.md         the readable whole — the document you share
+├── 00-brief.md … 10-red-team.md   the phase documents behind it
+├── assumptions.json         every input to the numbers, each with a source
+├── financials.md / .csv     projections from the model, never hand-computed
+├── traps.csv                24 fixed questions, every one answered
+├── compliance.csv, decisions.json
+└── roadmap.json, briefs/    only after the build stage
 ```
 
 ## The scripts
@@ -56,12 +61,15 @@ plan/
 No dependencies beyond the Python standard library.
 
 ```bash
-python3 -I scripts/new_plan.py plan --name "Acme"      # scaffold the documents
-python3 -I scripts/check_plan.py plan                  # check it against the bar
+python3 -I scripts/new_plan.py plan --name "Acme"       # scaffold every stage's files
+python3 -I scripts/model.py plan                         # assumptions -> projections
+python3 -I scripts/check_plan.py plan --stage plan      # check against the bar for that stage
 python3 -I scripts/parallel_brief.py plan --out plan/briefs
 ```
 
-`check_plan.py` fails on steps with no runnable test, compliance rows pointing at nothing, decisions with no rejected alternatives, dependency cycles, user-facing features with no measurement, concurrent workstreams fighting over a file, and leftover placeholders. It fails on a fresh scaffold by design — it is a worklist before it is a gate.
+`model.py` turns sourced assumptions into month-by-month cost, revenue and cash across three scenarios, plus a cost-at-scale table, so no projection is ever computed by hand.
+
+`check_plan.py` checks only what the current stage should have produced. It fails on unanswered traps, unsourced assumptions, financials that no longer match their inputs, steps with no runnable test, compliance rows pointing at nothing, decisions with no rejected alternatives, dependency cycles, user-facing features with no measurement, concurrent workstreams fighting over a file, and leftover placeholders. It fails on a fresh scaffold by design — it is a worklist before it is a gate.
 
 `parallel_brief.py` refuses to generate briefs when two workstreams that could run at the same time claim the same file, and reports the critical path in hours, which is what one night actually reaches.
 

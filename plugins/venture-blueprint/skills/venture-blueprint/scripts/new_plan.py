@@ -26,6 +26,13 @@ DOCS = [
         ("What success means", "Revenue, enterprise value or take-home, and the number."),
         ("Assumptions made in place of answers", "Anything the brief did not settle, so it can be corrected cheaply."),
     ]),
+    ("paths.md", "Paths", [
+        ("The brief in one paragraph", "Who the operator is, cash and time, where, platforms, what success means. Assumptions marked."),
+        ("Founder preferences", "Speed or size, who pays, how they like to sell, capital, involvement, geography, platform taste, hard nos, products they admire. See references/00-paths.md section 1."),
+        ("Paths compared", "Two or three paths that differ in who pays, the wedge, the model or the channel. Same rows for every path — references/00-paths.md section 4."),
+        ("Recommendation", "Which path or mix, and the one or two reasons that decide it. Where a path conflicts with a stated preference, say so."),
+        ("What would change the recommendation", "The fact that, if it turned out differently, would make you recommend another path. Once the founder answers, record their decision as described in references/00-paths.md section 5."),
+    ]),
     ("01-wedge.md", "Wedge and competition", [
         ("What the re-read changed", "The assumptions that turned out wrong once you read the real sources. If this is empty, you have not looked hard enough yet."),
         ("Candidates", "Only when the brief had no idea: the scored table, with sources."),
@@ -122,6 +129,28 @@ DOCS = [
         ("Kill scenarios", "Dies in six months, dies at scale, succeeds and is competed away — each with its leading indicator."),
         ("What I did not verify", "Every UNVERIFIED claim and who can settle it, what you could not test and who must, the three decisions you most want challenged, and what is out of scope."),
     ]),
+    ("business-plan.md", "Business plan", [
+        ("Executive summary", "One page, written last. Problem, product, why now, why you, how it makes money, base-case numbers from financials.md, what happens next."),
+        ("Concept", "One paragraph a stranger understands on first read."),
+        ("Vision", "What is true in five to ten years if this works. Concrete enough to be wrong."),
+        ("Mission", "What you do, for whom, and how. It should rule things out."),
+        ("Principles", "Three to six commitments you would keep even when they cost you."),
+        ("Problem and evidence", "Pain in customers' own words, quoted, sourced and dated. Why now."),
+        ("Customer personas", "Two to four, built from evidence, each changing a decision. See references/business-plan.md section 5."),
+        ("Anti-persona", "Who you deliberately do not serve, and why."),
+        ("Market", "Bottom-up sizing from 02-economics.md; why now; the ceiling."),
+        ("Competitor matrix", "One table read across: competitors including do-nothing, attributes that decide the purchase, cost at a typical volume, sourced and dated. Then the positioning map."),
+        ("Paths considered", "The options from paths.md, the one taken and why."),
+        ("Product", "MVP in and out of scope, the core loop, what makes it defensible, the expansion."),
+        ("Business model and pricing", "Model, unit, prices, free tier, rails and their order, the store-policy line per revenue line."),
+        ("Financials", "From financials.md only: scenarios, how cost and revenue scale, break-even and cash low point, unit economics, drivers, assumptions."),
+        ("Go-to-market", "The first fifty customers, the channel that scales, the loop and its arithmetic, launch sequence."),
+        ("Compliance and risk", "Obligations and how each is met or designed away, trap findings, rows for a lawyer, kill scenarios. Not legal advice."),
+        ("Statement of work", "Scope in and out, deliverables with acceptance criteria, milestones, roles, dependencies and lead times, budget, assumptions, change control."),
+        ("Milestones and metrics", "Per company stage, the falsifiable target that means move on."),
+        ("What is unverified and what is next", "Every UNVERIFIED claim and who can settle it, the decisions most worth challenging, the next action."),
+        ("Appendix", "Links to the phase documents and data files."),
+    ]),
 ]
 
 
@@ -196,6 +225,37 @@ def main():
             "feature,regime,requirement,posture,approach,step,evidence,"
             "source,verified,counsel\n", encoding="utf-8")
         written.append("compliance.csv")
+
+    assumptions_path = plan / "assumptions.json"
+    if assumptions_path.exists() and not args.force:
+        skipped.append("assumptions.json")
+    else:
+        example = Path(__file__).resolve().parent.parent / "templates" / "assumptions.example.json"
+        try:
+            seeded = json.loads(example.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            print(f"  warning: could not read {example}: {exc}")
+            seeded = {}
+
+        def blank_sources(node):
+            if isinstance(node, dict):
+                for key in list(node):
+                    if key == "source":
+                        node[key] = "TODO: give a source, or say UNVERIFIED and why"
+                    elif key == "verified":
+                        node.pop(key)
+                    else:
+                        blank_sources(node[key])
+            elif isinstance(node, list):
+                for item in node:
+                    blank_sources(item)
+
+        blank_sources(seeded)
+        seeded = {"_note": "Seeded from the worked example in templates/. Replace every "
+                           "number and every source with this venture's own, then run "
+                           "scripts/model.py.", **seeded, "venture": args.name}
+        assumptions_path.write_text(json.dumps(seeded, indent=2) + "\n", encoding="utf-8")
+        written.append("assumptions.json")
 
     traps_path = plan / "traps.csv"
     if traps_path.exists() and not args.force:

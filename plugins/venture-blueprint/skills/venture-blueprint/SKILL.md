@@ -1,134 +1,148 @@
 ---
 name: venture-blueprint
-description: Plan a whole software product or company from one idea, or from no idea at all, down to a build roadmap an agent can execute overnight. Finds the problem worth solving from real evidence, tears down competitors, sizes the economics bottom-up, builds a compliance register (federal, state, Apple, Google), chooses the stack, derives a design language and asset system, plans SEO/ASO/social growth and multi-rail monetization, decides what to own in-house, then emits ordered build steps with anchors, risks, tests, gates and parallel session briefs. Use this whenever someone wants a product, app, startup, business or major feature planned properly — when they say "plan this out", "how would I build X", "is this a good idea", "find me a business", "make me money", or ask for a roadmap, market research, competitive analysis, go-to-market, pricing or monetization plan — and also when they hand over an existing product and ask what is missing. It applies even when the brief is one vague sentence and finding the real problem is part of the job.
+description: Plans a software product or company from a rough idea, or no idea at all, in three stages - brainstorm, plan, build - and stops between them. Brainstorms two or three genuinely different paths and learns the founder's preferences; finds the problem from real evidence; writes vision, mission, customer personas, a competitor matrix, bottom-up market sizing, cost and revenue projections by scenario, compliance and app-store traps, stack, design language, growth and payments; assembles a business plan and statement of work; and only when asked, an ordered build roadmap with parallel session briefs. Use it whenever someone wants to brainstorm, validate or plan a product, app, startup or business - "plan this out", "is this a good idea", "find me a business", "make me money", market fit, business plan, competitor analysis, personas, pricing, financial projections, go-to-market or a roadmap - or hands over an existing product and asks what is missing.
 ---
 
 # Venture blueprint
 
-You're a founding team running as one process: the person who finds the market, the architect who picks the stack, the lawyer who keeps the company out of trouble, the designer who sets the language, the growth lead, and the engineer who has to ship it on Monday. You plan top-down (what is this company and why does it win) and bottom-up (which file changes first, and how do we know it worked) in the same pass, because a strategy nobody can build is a daydream and a backlog with no thesis is busywork.
+You're a founding team running as one process: the person who finds the market, the strategist who chooses between paths, the analyst who builds the numbers, the lawyer who keeps the company out of trouble, the designer who sets the language, the growth lead, and the engineer who has to ship it on Monday. You plan top-down (what is this company and why does it win) and bottom-up (what gets built first, and how do we know it worked), because a strategy nobody can build is a daydream and a backlog with no thesis is busywork.
 
-**This skill is a method, not a business-plan template.** The output is not a pitch deck and not a document to admire. It is a plan precise enough that a build agent with no memory of this conversation can pick up any step and do it correctly, and a founder can take the human steps without asking you a question. `examples/pxi-analytics-release.md` shows the bar: one real release plan where every claim was re-read from source, every step had an anchor, a risk and a test, and the scope cut was decided in advance. That is the resolution to aim for, applied to a whole company instead of one release.
+**This skill is a method, not a business-plan template.** Its output is precise enough that a founder can decide from it, an investor or partner can read it, and — at the last stage — a build agent with no memory of this conversation can pick up any step and do it correctly. `examples/pxi-analytics-release.md` shows the resolution to aim for.
 
-The method's one non-negotiable idea: **a plan is a set of claims, and a claim without a dated source is a liability.** Prices, platform commissions, legal status, competitor behaviour and library APIs all move. While writing this skill, one search returned Apple's US external-purchase commission as 0%, 15% and 27% simultaneously, and a Texas law that had been enjoined was back in force on appeal. A plan that states a number confidently and wrongly is worse than one that says "unverified, check here" — because the wrong number gets built on, priced on, and filed on.
+The method's one non-negotiable idea: **a plan is a set of claims, and a claim without a dated source is a liability.** Prices, platform commissions, legal status, competitor behaviour and library APIs all move. While writing this skill, one search returned Apple's US external-purchase commission as 0%, 15% and 27% simultaneously, and a Texas law that had been enjoined was back in force on appeal. A plan that states a number confidently and wrongly is worse than one that says "unverified, check here", because the wrong number gets built on, priced on and filed on.
 
-## What you hand over
+## Three stages, and you stop between them
 
-- **A `plan/` directory** of numbered documents, one per phase, scaffolded by `scripts/new_plan.py`. Each is written to be read on its own by someone who joins at that phase.
-- **Four machine-readable artifacts** that downstream build sessions and the validator consume: `decisions.json` (every choice, its rejected alternatives and why), `compliance.csv` (feature → rule → requirement → implementing step → evidence), `traps.csv` (the fixed trap sweep, every row answered with a source or marked n/a with a reason), and `roadmap.json` (ordered steps with anchors, risks, tests, owners and file sets).
-- **Parallel build briefs** from `scripts/parallel_brief.py`: one self-contained prompt per workstream, with disjoint file ownership, so several agent sessions can build through the night without overwriting each other.
-- **A green validator run.** `scripts/check_plan.py` fails on unsourced claims, steps with no test, triggered compliance rows with no implementing step, features with no measurement, and leftover placeholders. Hand over nothing red.
-- **A short note in chat:** the wedge in two sentences, the three decisions you most want challenged, what you could not verify and who must verify it, and the first step to run tonight.
+Founders brainstorm before they plan and plan before they build. Running straight from an idea to a build roadmap skips the two conversations that matter most — *which version of this idea* and *is it worth doing at all* — and produces a confident plan for the wrong thing.
 
-## Before you start: the brief
+| Stage | What happens | You stop with | Check |
+|---|---|---|---|
+| **1. Explore** | The brief and the founder's preferences; a bounded evidence pass; two or three genuinely different paths compared side by side; a recommendation | The paths table and a question: which path, or which mix? | `check_plan.py --stage explore` |
+| **2. Plan** | The chosen path at depth: wedge, competition, economics, compliance, architecture, design, growth, monetization, ecosystem, red team, the trap sweep, the financial model — assembled into one business plan with a statement of work | `plan/business-plan.md` plus the phase documents, and a question: build it, change it, or stop here? | `check_plan.py --stage plan` |
+| **3. Build** | The roadmap: ordered steps with anchors, risks, tests and reverts; the cut line; gates; parallel session briefs | `roadmap.json`, `09-roadmap.md` and `briefs/` | `check_plan.py --stage build` |
 
-Five things change every downstream answer. Ask for whatever is missing, in one batch, and do not stall the whole plan waiting — mark assumptions and keep going.
+**Never start the next stage until the founder says so.** Show the work, ask the one question, and wait. If they ask up front to go straight through, still show the paths in one message first — it costs a minute and it is the cheapest redirect in the whole process — then continue without further stops.
 
-1. **The operator.** Who is building this, what they already own (audience, code, data, licences, relationships), and what they can reach that a stranger cannot. The same idea is a good business for one person and a bad one for another. PXI's wedge was never "an events app" — it was being able to get the photos from inside the room, which nobody else could.
-2. **Cash, time and risk.** Runway in months, hours per week, whether this must pay for itself from month one, and whether outside money is on the table. Bootstrapped and funded produce different architectures, not just different budgets.
-3. **Where the customers and the company are.** Jurisdiction decides the compliance register and the payment rails. "US" is not enough; the state matters.
-4. **Platforms.** iOS, Android, web, desktop, or an API. This sets store policy, review timelines and the asset system.
-5. **What "millions" means.** Revenue, enterprise value, or take-home. The answer changes the pricing model and sometimes the whole wedge.
+A founder who only wants to brainstorm gets Stage 1 and nothing more. That is a complete, useful outcome, not an unfinished one.
 
-When the brief is "make me millions" and nothing else, you still don't brainstorm. Go to `references/01-wedge.md` and mine evidence for problems people are already paying to avoid. Come back with three candidates, scored, with a recommendation.
+## Stage 1: Explore
 
-## The order of work
+Load `references/00-paths.md` and follow it. In short:
 
-Run these in order. Each phase ends with a gate — a question you must be able to answer from written evidence, not impression. A failed gate sends you back, and going back early is cheap. Load the reference file when you enter the phase; don't preload them all.
+1. **Ask the brief and the preferences in one batch.** Use a structured question tool if the session has one; otherwise one numbered message. Five things change every answer — who the operator is and what they can reach, cash and time and risk, where the customers and the company are, platforms, and what "millions" means — and a handful of preferences change which path is right: speed versus size, who pays, how they like to sell, capital, involvement, and their hard nos. Do not stall waiting: mark assumptions and keep going.
+2. **Run a bounded evidence pass** — enough to ground the paths in real complaints, real prices and real competitors, not the full research. When there is no idea at all, this is where you mine for problems people already pay to avoid (`references/01-wedge.md` §1).
+3. **Generate two or three paths that differ in something that matters** — who pays, the wedge, the model, the channel — not three flavours of one plan. Compare them in one table, recommend one, and say what would change your mind.
+4. **Record the answer** in `plan/paths.md`: the paths, the choice, and the founder's preferences written as constraints that every later phase must honour.
+
+## Stage 2: Plan
+
+Run the phases for the chosen path. Each ends with a gate — a question you must be able to answer from written evidence, not impression. A failed gate sends you back, and going back early is cheap. Load each reference when you enter its phase; don't preload them all.
 
 | Phase | Reference | Gate before moving on |
 |---|---|---|
-| 0. Intake and problem finding | `01-wedge.md` | Can you name one person who has this problem, in their own quoted words, from a source with a URL and a date? |
-| 1. Competition and the gap | `01-wedge.md` | For each of 3+ incumbents: what they charge, how they get customers, and the top complaint in their own users' words. What gap is structural, not just unbuilt? |
-| 2. Economics | `02-economics.md` | Does the bottom-up count of reachable paying units × price clear the cost base? Is cash-to-first-dollar inside runway? |
-| 3. Compliance and platform policy | `03-compliance.md` | Does every triggered rule have an implementing step in the roadmap and a named evidence artifact? Is anything a licence you don't hold? |
-| 4. Architecture | `04-architecture.md` | Is every layer chosen against named rejected alternatives, with a cost at 1k / 100k / 1M users and a stated performance budget? |
-| 5. Design language | `05-design-language.md` | Do tokens exist as code, do contrast ratios pass, and does every link type and store asset have a generated, intentional image? |
-| 6. Growth | `06-growth.md` | Is there one loop whose k-factor or payback you can actually compute, and does every feature have its event and pass criterion? |
-| 7. Monetization | `07-monetization.md` | Is the price anchored to a researched willingness to pay, is each corridor's rail named with its KYC and settlement reality, and is the store-policy line drawn? |
-| 8. Ecosystem and in-house tools | `08-ecosystem.md` | For every step between the customer's problem and the money: who owns it today, and is absorbing it justified by fee, dependency, data or retention? |
-| 9. Roadmap | `09-roadmap.md` | Does every step have an anchor, a risk, a test and a revert? Is the cut line written? Are the human-only steps separated out? |
-| 10. Red team | `10-red-team.md` | What kills this in six months, what is unverified, and what cannot be undone? |
+| 1. Wedge and competition | `01-wedge.md` | Can you name one person with this problem, in their own quoted words, from a dated source? For 3+ incumbents: price, acquisition channel, top complaint in their users' words. Which gap is structural? |
+| 2. Economics | `02-economics.md` | Does the bottom-up count clear the cost base? Is cash-to-first-dollar inside runway? Are the numbers from `model.py`, not mental arithmetic? |
+| 3. Compliance and platform policy | `03-compliance.md` | Is every triggered rule recorded with what it requires and how you'll meet it? Is anything a licence you don't hold? |
+| 4. Architecture | `04-architecture.md` | Is every layer chosen against named rejected alternatives, with a cost at 1k / 100k / 1M users? |
+| 5. Design language | `05-design-language.md` | Is the language written, are tokens defined with contrast checked, and is every asset and link type accounted for? |
+| 6. Growth | `06-growth.md` | Is there one loop whose k-factor or payback you can compute, and a measurement contract? |
+| 7. Monetization | `07-monetization.md` | Is price anchored to researched willingness to pay, each corridor's rail named with its KYC reality, and the store-policy line drawn per revenue line? |
+| 8. Ecosystem | `08-ecosystem.md` | For every step from problem to money: who owns it, and is absorbing it justified? |
+| 10. Red team | `10-red-team.md` | What kills this in six months, what is unverified, what cannot be undone? |
 
-**Across all of them, run the trap sweep** in `references/traps.md` — a fixed list of questions whose answers are free now and expensive later, because a third party's rule quietly decides your margin or your legality and nothing in your own code mentions it. Run it at Phase 3, again at Phase 7, and again in Phase 10, because adding one feature can flip an answer. Judgement finds the traps you can imagine; a fixed checklist finds the ones you can't, which is why the list is fixed and the validator refuses a plan that leaves a row unanswered.
+**Run the trap sweep** in `references/traps.md` at Phase 3, again at Phase 7, and again in Phase 10 — a fixed list of questions whose answers are free now and expensive later, because a third party's rule quietly decides your margin or your legality and nothing in your own design mentions it. Judgement finds the traps you can imagine; a fixed checklist finds the ones you can't.
 
-Then run `scripts/check_plan.py` and fix everything it reports.
+**Build the numbers with `scripts/model.py`.** Write the assumptions to `plan/assumptions.json`, each with a source or an `UNVERIFIED` marker, and let the script produce month-by-month cost, revenue and cash across three scenarios plus a cost-at-scale table. Quote its output; don't do the arithmetic yourself.
 
-**Existing product instead of a new idea?** Run the same phases as a gap analysis. Phase 0 becomes "what is this already, read from the source, and what did the re-read change"; Phase 1 becomes "where has the market moved since this was designed". Keep the gates — they find the holes. This is the mode to use when someone hands over a repo or a live product and asks what's missing.
+**Then assemble the business plan** following `references/business-plan.md`: executive summary, concept, vision, mission and principles, problem and evidence, customer personas, market, competitor matrix, the paths considered, product scope, business model, financials, go-to-market, compliance and risks, a statement of work, milestones, and what is unverified. It is a synthesis — every number traces back to a phase document or the model — and it is the document the founder will actually share.
+
+Run `check_plan.py --stage plan`, fix what it reports, and stop.
+
+## Stage 3: Build
+
+Only when the founder asks. Load `references/09-roadmap.md`: every step gets an anchor, a risk, a runnable test, a revert and a file set; contracts land first as their own workstream; the cut line is written in advance; human steps are separated with their lead times; compliance and trap rows that need work point at real steps. Then `parallel_brief.py` cuts the roadmap into self-contained session briefs and refuses if two concurrent workstreams claim the same file. Run `check_plan.py --stage build`.
+
+**Existing product instead of a new idea?** Run the same stages as a gap analysis. Explore becomes "what is this already, read from the source, and what did the re-read change", with the paths being the different directions it could go next. Keep the gates — they find the holes.
+
+## What you hand over
+
+- **Stage 1:** `plan/paths.md` and a short chat message with the comparison table, your recommendation, and the question.
+- **Stage 2:** `plan/business-plan.md` — the readable whole — backed by the phase documents `00`–`08` and `10`, `assumptions.json` with `financials.md` and `financials.csv` from the model, `decisions.json`, `compliance.csv` and `traps.csv`. In chat: the wedge in two sentences, the base-case numbers, the three decisions most worth challenging, what you could not verify and who must, and the question.
+- **Stage 3:** `roadmap.json`, `09-roadmap.md` and `briefs/`, with the first step to run tonight.
+
+If the session can publish a shareable document — a docs connector, an artifact, or a docx or PDF skill — offer to publish the business plan once it passes the check. Many founders will send it to a partner, an investor or a contractor, and a link is easier than a folder.
 
 ## The bar
 
 These are the rules that separate a plan from a wish. Each one exists because its absence costs a rebuild.
 
-**Every claim carries its source and the date you checked it.** Inline, as a URL plus a date, or a `file:line` plus a commit, or "founder, this conversation". Half-remembered numbers are the main way plans go wrong, because they look identical to numbers you verified. Where a fact matters and you cannot verify it, write `UNVERIFIED:` and name who can — the validator counts those and the founder decides what to chase.
+**Every claim carries its source and the date you checked it.** Inline, as a URL plus a date, or a `file:line` plus a commit, or "founder, this conversation". Half-remembered numbers are the main way plans go wrong, because they look identical to numbers you verified. Where a fact matters and you cannot verify it, write `UNVERIFIED:` and name who can.
 
-**Re-read before you plan, and write down what the re-read changed.** Open the competitor's actual pricing page, the actual statute, the actual library source, the actual repo. Then open your plan with a short "what the re-read changed" section listing the assumptions that turned out wrong. If nothing changed, you did not look hard enough yet. This section is the most useful page in the document, because it is the part a reader cannot get anywhere else.
+**Re-read before you plan, and write down what the re-read changed.** Open the competitor's actual pricing page, the actual statute, the actual library source. Then open your plan with what turned out wrong. If nothing changed, you did not look hard enough yet. This section is the part a reader cannot get anywhere else.
 
-**No top-down market sizing.** "1% of a $40B market" is not a number, it is a mood. Count units you could name: venues in Austin that run a ticketed event most weeks, clinics in Texas with 2–10 practitioners, Shopify stores shipping perishables. Multiply by a price you have seen someone pay. A small defensible number beats a large invented one, and it tells you what to build.
+**Paths before plans.** Two or three genuinely different options, compared honestly, before depth on any of them. A founder who chose between real alternatives commits to the plan; one who was handed a single answer argues with it for months.
 
-**Every step names its anchor, its risk, its test and its revert.** The anchor is where the change lands (`src/lib/storeLinks.js`, "Stripe dashboard → Tax settings"). The risk is what could break. The test is the command or query that proves it worked, with its pass criterion. The revert is how to undo it. A step missing any of these is a wish, and the validator rejects it.
+**Preferences are constraints.** What the founder said in Stage 1 — bootstrap only, no B2B sales, never hold funds, web first — binds every later phase. When the method would choose differently, say so once in a sentence, then plan what they asked for.
 
-**Decide the cut line before you build.** Write, in advance, which steps must ship and which fall off when time runs out, and why. Scope decisions made at 4am with a half-finished branch are always worse than the same decision made calmly a week earlier.
+**No top-down market sizing.** "1% of a $40B market" is a mood, not a number. Count units you could name and multiply by a price you have seen someone pay.
 
-**Contracts first, then parallel work.** Shared types, the event taxonomy, design tokens, API schemas and enum vocabularies land as their own artifact before feature work forks into parallel sessions — and each consumer gets a test that fails when it drifts from the contract. This is the single thing that makes an overnight multi-session build possible instead of a merge disaster.
+**Run the numbers with the model, never in your head.** Language models make arithmetic errors that read exactly like correct arithmetic. Every projection, break-even month and cost-at-scale figure comes from `model.py` and the sourced assumptions it reads.
 
-**Name what cannot be undone.** A tracking consent answer, a published package version, a sent email blast, a deleted row, an activated data filter, a domain transfer, a chosen legal entity. Flag these in the step itself, not in a footnote, so nobody runs one casually.
+**Every step names its anchor, its risk, its test and its revert.** In the build stage, a step missing any of these is a wish, and the validator rejects it.
 
-**Compliance is an architecture input, not a disclaimer.** The question is never "what warning do we add" but "what shape must this take". PXI routes ticket money straight to the organizer's own Stripe account and never holds it — that is a money-transmission licensing decision made in the data flow, and no amount of terms-of-service text would have substituted. Design the obligation away where you can, and where you can't, put the implementing step in the roadmap.
+**Decide the cut line before you build.** Scope decisions made at 4am with a half-finished branch are always worse than the same decision made calmly a week earlier.
 
-**Every feature ships with its measurement.** The event name, its parameters, and the query with a pass criterion that proves the feature works in production — written while the feature is designed, not after launch. Features without measurement cannot be improved or cut, so they accumulate.
+**Contracts first, then parallel work.** Shared types, the event taxonomy, design tokens and enum vocabularies land as their own artifact before feature work forks — with a test in each consumer that fails on drift. This is what makes an overnight multi-session build possible instead of a merge disaster.
 
-**Every surface a user reaches is designed, including the ones you don't look at.** Link previews, OG images per page type, store screenshots per device class, empty states, error states, the 404, the receipt email, the push notification. Generate them from the token system so they stay consistent and cost nothing to regenerate. A hand-made one-off is a thing that will be wrong in three months.
+**Name what cannot be undone.** Consent answers, sent messages, published versions, deleted data, a chosen legal entity. Flag them where they occur, not in a footnote.
 
-**Build what you use daily, rent what you touch monthly, and absorb what takes a cut of every transaction.** Own the admin console, the moderation queue and the analytics. Rent the error tracker. Absorb the fee layer when the fee is on your revenue and the work is weeks, not years.
+**Compliance is an architecture input, not a disclaimer.** PXI routes ticket money straight to the organizer's own Stripe and never holds it, and sells ad credits on the web rather than in the app — both obligations designed away in the data flow rather than argued about later. Design the obligation away where you can.
 
-**Prefer native, and price the exception.** Native is the default for apps because it costs less in performance, battery, platform review friction and long-run maintenance. When you choose otherwise, write what it buys (usually shipping speed or one codebase) and what it costs, so the trade is visible and reversible.
+**Ask the fixed questions even when they look irrelevant.** The traps that cost the most are the ones nothing in your product hints at. You cannot find them by thinking harder about your own design, only by asking a set list out loud and writing the answer down.
 
-**A plan with no human steps is incomplete.** Console work, legal filings, bank and KYC, store listings, DNS, review notes, credential creation. Separate them into their own section with exact instructions, because the build agent cannot do them and will otherwise silently block.
+**Every feature ships with its measurement**, and **every surface a user reaches is designed** — link previews, store screenshots, empty and error states — generated from the token system so they stay consistent.
 
-**Say plainly what you did not verify and what you did not do.** "I have no BigQuery credentials, so someone on your side must run these" is a complete, useful sentence. Quiet gaps are how plans fail in the third week.
+**Build what you use daily, rent what you touch monthly, absorb what takes a cut of every transaction**, and **prefer native, pricing the exception** when you choose otherwise.
 
-**Ask the fixed questions even when they look irrelevant.** The traps that cost the most are the ones nothing in your product hints at: a revenue line reclassified by a store rule, an obligation that attaches because of who signed up, a licence buried in a transitive dependency. You cannot find these by thinking harder about your own design, only by asking a set list out loud and writing the answer down — which is why `traps.csv` has no blanks and "n/a" carries a reason.
+**A plan with no human steps is incomplete**, and **say plainly what you did not verify and did not do.** Quiet gaps are how plans fail in the third week.
 
-**No invented specifics.** Never fabricate a competitor's price, a review quote, a statute number, a library API or a market figure to fill a slot. An honest `UNVERIFIED:` is worth more than a plausible fiction, which is indistinguishable from research until it is expensive.
+**No invented specifics.** Never fabricate a competitor's price, a review quote, a statute, a persona's words or a market figure to fill a slot. An honest `UNVERIFIED:` beats a plausible fiction, which is indistinguishable from research until it is expensive.
 
 ## Working with the user
 
-Show the wedge and the three candidate problems **before** writing ten documents. Changing direction costs one message now and a full rewrite later. The same applies at Phase 4 (stack) and Phase 7 (price): say what you're choosing and why, in a few lines, and let them redirect.
+Ask questions in batches, not drip by drip, and offer choices where you can — a founder answers four multiple-choice questions faster than one open one. Keep them posted in one short line per phase; findings belong in the plan files, not in chat. When a later phase changes an earlier decision, go back and change it, and note it in that document's "what the re-read changed".
 
-Keep them posted in one short line per phase naming what you're on — findings belong in the plan files, not in chat. When a phase turns up something that changes an earlier decision, go back and change it, then note it in that document's "what the re-read changed".
-
-Where this skill's method and the user's stated preference disagree, the user wins — but say once, in a sentence, what the method would have done and why, and then build what they asked for.
+Plans live on disk, so the folder matters. If the session has no project folder, or sits in a temporary one, suggest a real folder before writing the plan — a plan that disappears with the session is a brainstorm nobody can return to.
 
 ## Files
 
-- `references/01-wedge.md`: the brief, finding problems from evidence when there's no idea, falsification, competitor teardown, review mining, the gap map, wedge scoring
-- `references/02-economics.md`: bottom-up sizing, unit economics, CAC and payback, the bootstrap test, sensitivity
-- `references/03-compliance.md`: the register method, federal and state triggers (privacy, biometrics, minors, messaging, accessibility, payments), Apple and Google policy mapped to features, the verification rule
-- `references/04-architecture.md`: layer-by-layer decision matrices, the native rule, performance and dependency budgets, cost at scale, data model, failure modes
-- `references/05-design-language.md`: where to get inspiration and how to abstract it, deriving tokens, the component inventory, the generated asset and link-preview system
-- `references/06-growth.md`: programmatic SEO, ASO and store assets, social and content, referral loops and their math, the attribution and measurement contract
-- `references/07-monetization.md`: pricing basis, models, payment rails by corridor with their real requirements, the store-policy boundary, taxes and payouts
-- `references/08-ecosystem.md`: the value-chain map, build vs buy vs absorb, the operator console inventory, moderation and support
-- `references/09-roadmap.md`: the step format, workstreams and dependency order, the cut line, gates, rollback, and how to cut a plan into parallel overnight sessions
-- `references/10-red-team.md`: the hostile read, externalities and edge cases, kill scenarios, the pre-handoff audit
-- `references/traps.md`: the trap sweep — not a phase, but a fixed question list run at Phases 3, 7 and 10, for the third-party rules that decide your margin or legality without appearing anywhere in your code
-- `templates/traps.json`: the canonical trap list, seeded into `traps.csv` by `new_plan.py` and enforced by `check_plan.py`, so the two cannot drift
-- `templates/schemas.md`: the shape of `decisions.json`, `compliance.csv` and `roadmap.json`, with a worked example of each. The phase-document skeletons live in `scripts/new_plan.py`, which writes them
-- `examples/pxi-analytics-release.md`: a real release plan at the target resolution, annotated with the technique each section demonstrates
+- `references/00-paths.md`: Stage 1 — the intake and preference questions, the bounded evidence pass, generating genuinely different paths, the comparison table, recording the choice
+- `references/01-wedge.md`: finding problems from evidence, falsification, competitor teardown, review mining, the gap map, the wedge
+- `references/02-economics.md`: bottom-up sizing, unit economics, CAC and payback, the bootstrap test, feeding the model
+- `references/03-compliance.md`: the register, federal and state triggers, Apple and Google policy mapped to features, the verification rule
+- `references/04-architecture.md`: decisions against rejected alternatives, the native rule, budgets, cost at scale, data model, failure modes
+- `references/05-design-language.md`: inspiration sources and how to abstract them, tokens, components, the generated asset and link-preview system
+- `references/06-growth.md`: programmatic SEO, ASO, social, loops and their arithmetic, the measurement contract
+- `references/07-monetization.md`: pricing models, the store-policy line per revenue line, payment rails by corridor, taxes and payouts
+- `references/08-ecosystem.md`: the value chain, build vs rent vs absorb, the operator console
+- `references/09-roadmap.md`: Stage 3 — the step format, contracts first, cut line, gates, rollback, parallel overnight sessions
+- `references/10-red-team.md`: the hostile read, abuse and edge cases, kill scenarios, the pre-handoff audit
+- `references/traps.md`: the fixed trap sweep run at Phases 3, 7 and 10
+- `references/business-plan.md`: assembling the business plan — vision, mission, personas, competitor matrix, financials, statement of work
+- `templates/traps.json`: the canonical trap list, seeded and enforced by the scripts
+- `templates/assumptions.example.json`: a worked financial-model input
+- `templates/schemas.md`: the shape of every machine-readable file
+- `examples/pxi-analytics-release.md`: a real plan at the target resolution, annotated
 
 ## Scripts
 
-Run with `python3 -I` (no dependencies beyond the standard library, so they work anywhere).
+Standard-library Python only, so they run anywhere. Use `python3 -I`.
 
 ```bash
-# Scaffold plan/ with the numbered documents and machine-readable stubs
-python3 -I scripts/new_plan.py <plan-dir> --name "<venture name>"
-
-# Check the plan against the bar. Exit code 1 means something needs fixing.
-python3 -I scripts/check_plan.py <plan-dir>
-
-# Emit one self-contained build brief per workstream, with file-ownership conflicts flagged
+python3 -I scripts/new_plan.py <plan-dir> --name "<venture>"     # scaffold every stage's files
+python3 -I scripts/model.py <plan-dir>                           # assumptions.json -> financials.md + .csv
+python3 -I scripts/check_plan.py <plan-dir> --stage explore|plan|build
 python3 -I scripts/parallel_brief.py <plan-dir> --out <plan-dir>/briefs
 ```
 
-`check_plan.py` is the enforcement for the bar — run it before every handoff, and again after any edit. It is deliberately strict about the mechanical rules (missing tests, unsourced numbers, orphaned compliance rows, leftover placeholders) because those are exactly the failures that are invisible on a read-through and expensive in week three.
+`check_plan.py` enforces the bar for the stage you're in: it checks only what that stage should have produced, so a plan-stage document is not failed for having no roadmap yet. It is deliberately strict about the mechanical rules, because those are the failures that are invisible on a read-through and expensive in week three.

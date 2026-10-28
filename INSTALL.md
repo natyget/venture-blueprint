@@ -57,6 +57,19 @@ To put it in one specific project instead of everywhere, copy that same `skills/
 
 ---
 
+## Your first session
+
+1. **Start in a folder you'll keep.** The plan is written as files. In Claude Code, make a folder for the idea — say `ventures/tool-share` — and open the session there. In a session with no folder, the files are deleted when the session is.
+2. **Just describe the idea.** You don't need a special command; the skill switches on by itself. If you'd rather be explicit, type `/venture-blueprint` and then the idea.
+3. **Answer the batch of questions.** It asks about you, your money and time, and your preferences — fast or big, who pays, how you like to sell, your hard nos — mostly as multiple choice, all at once.
+4. **Pick a path.** It comes back with two or three genuinely different ways to do the idea, side by side, with a recommendation, and **stops**. Pick one, mix two, or tell it none of them fit.
+5. **Say "plan it"** when you want the full business plan: vision and mission, customer personas, competitor matrix, market size, cost and revenue projections and how they scale, risks, and a statement of work. It stops again when that's done.
+6. **Say "build it"** only when you want the step-by-step build roadmap.
+
+A brainstorm that stops after step 4 is a perfectly good use of it, and the cheapest one.
+
+In the Claude app it works the same way; the plan comes back as files you can download.
+
 ## How to tell it's working
 
 Ask Claude: **"what skills do you have available?"** — `venture-blueprint` should be in the list.
@@ -65,13 +78,13 @@ Then try the hardest test, which is the point of the thing:
 
 > make me millions
 
-It should not brainstorm at you. It should go looking for problems people already pay to avoid — bad app reviews, people leaving a competitor, new laws with deadlines — and come back with a few real candidates, scored, with sources and dates, and a recommendation.
+It should not brainstorm at you. It should go looking for problems people already pay to avoid — bad app reviews, people leaving a competitor, new laws with deadlines — and come back with a few real candidates, scored, with sources and dates, and a recommendation. Then it should stop and ask you which one.
 
 ---
 
 ## What it needs
 
-Python 3, which Macs and most Linux machines already have. Nothing else — no packages to install. The three helper scripts use only what ships with Python.
+Python 3, which Macs and most Linux machines already have. Nothing else — no packages to install. The four helper scripts use only what ships with Python.
 
 To check, run `python3 --version`. Anything 3.9 or newer is fine.
 

@@ -63,6 +63,19 @@ The T01/T02 rows above are a real worked example: a product can owe a store noth
 
 Project-specific traps the research turns up get their own ids (`P01`, `P02`) and are held to the same standard.
 
+## `assumptions.json`
+
+The input to `scripts/model.py`. See `templates/assumptions.example.json` for a complete worked file.
+
+- `customers`: `new_first_month`, `new_growth_monthly`, optional `new_max_per_month`, `churn_monthly`, `cac`, plus a `label` ("organizers", "clinics") used in the output.
+- `revenue_lines`: each has a `kind` — `subscription` (price per month), `per_unit` (price × `units_per_customer_month`), `take_rate` (`rate` × `gmv_per_customer_month`) or `one_time` (price per new customer) — plus optional `attach_rate`, `store_commission`, `processing_pct` and `processing_fixed`. Set `store_commission` per line: it is the T01 trap in numbers.
+- `variable_costs`: `per_customer_month` and/or `pct_of_revenue`.
+- `fixed_costs`: `monthly`, optional `start_month` / `end_month`, and optional `steps` (`at_customers`, `monthly`) for costs that jump at a threshold.
+- `scenarios`: multipliers `new_x`, `growth_x`, `churn_x`, `price_x`, `cac_x`. Defaults to conservative / base / optimistic.
+- Every block carries a `source`. `TODO` or empty fails the plan-stage check; `UNVERIFIED: …` passes but is listed.
+
+`financials.md` records a hash of the assumptions it was built from, so `check_plan.py` can tell when someone edited the inputs and forgot to rerun the model.
+
 ## `roadmap.json`
 
 The steps, the gates, and the things that cannot be undone. `scripts/parallel_brief.py` reads this to generate the build briefs and to prove that concurrent workstreams own disjoint files.

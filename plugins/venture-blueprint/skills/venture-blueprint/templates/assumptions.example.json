@@ -1,0 +1,150 @@
+{
+  "venture": "Example: flat-fee event ticketing for independent organizers",
+  "currency": "USD",
+  "months": 36,
+  "starting_cash": 15000,
+  "scale_points": [
+    100,
+    1000,
+    10000,
+    50000
+  ],
+  "customers": {
+    "label": "organizers",
+    "starting": 0,
+    "new_first_month": 4,
+    "new_growth_monthly": 0.1,
+    "new_max_per_month": 150,
+    "churn_monthly": 0.06,
+    "cac": 180,
+    "source": "UNVERIFIED: 4 organizers in month 1 from the walk-in plan in 01-wedge.md; 10%/mo growth and a 150/mo ceiling on what one founder can onboard; 6% monthly churn because small organizers stop running events; CAC is founder sales time at a loaded hourly rate plus a launch promo. Replace all four with 60 days of real data",
+    "verified": "2026-10-28"
+  },
+  "revenue_lines": [
+    {
+      "name": "Ticket fee",
+      "kind": "per_unit",
+      "price": 0.99,
+      "units_per_customer_month": 90,
+      "attach_rate": 0.6,
+      "store_commission": 0,
+      "source": "Price: published organizer pricing, flat $0.99 per paid ticket. Volume UNVERIFIED: ~90 paid tickets/organizer/month (one or two smaller events); attach 60% because many organizers run free events",
+      "verified": "2026-10-28"
+    },
+    {
+      "name": "Messaging credits",
+      "kind": "per_unit",
+      "price": 0.06,
+      "units_per_customer_month": 300,
+      "attach_rate": 0.35,
+      "store_commission": 0,
+      "source": "Blended 5c email / 8c SMS from published pricing. Sold on the web dashboard only, so no store commission (see traps.csv T01/T02). Usage UNVERIFIED",
+      "verified": "2026-10-28"
+    },
+    {
+      "name": "Featured placement",
+      "kind": "subscription",
+      "price": 40,
+      "attach_rate": 0.1,
+      "store_commission": 0,
+      "processing_pct": 0.029,
+      "processing_fixed": 0.3,
+      "source": "UNVERIFIED: ~$10/day featured slot x ~4 days a month; 10% of organizers buy. Web-only purchase. Processing at the card rate on the processor's pricing page",
+      "verified": "2026-10-28"
+    }
+  ],
+  "variable_costs": [
+    {
+      "name": "Media storage and egress",
+      "per_customer_month": 0.9,
+      "source": "UNVERIFIED: photo-heavy; estimate from 04-architecture.md cost model at 1k users"
+    },
+    {
+      "name": "Support",
+      "pct_of_revenue": 0.04,
+      "source": "UNVERIFIED: founder time costed at a contractor rate until a hire"
+    }
+  ],
+  "fixed_costs": [
+    {
+      "name": "App store developer programs",
+      "monthly": 10.5,
+      "source": "Apple $99/yr + Google $25 one-time, amortised; both programs' enrollment pages",
+      "verified": "2026-10-28"
+    },
+    {
+      "name": "Hosting and database",
+      "monthly": 60,
+      "steps": [
+        {
+          "at_customers": 500,
+          "monthly": 450
+        },
+        {
+          "at_customers": 5000,
+          "monthly": 3200
+        }
+      ],
+      "source": "UNVERIFIED: floor plan, then a managed-database tier change and read replicas per 04-architecture.md"
+    },
+    {
+      "name": "Tooling (email, SMS registration, error tracking)",
+      "monthly": 120,
+      "steps": [
+        {
+          "at_customers": 2000,
+          "monthly": 900
+        }
+      ],
+      "source": "UNVERIFIED: free tiers end around 2k organizers; see traps.csv T19"
+    },
+    {
+      "name": "Contract design and engineering",
+      "monthly": 2500,
+      "end_month": 6,
+      "source": "UNVERIFIED: part-time contractor for the MVP, months 1-6 only"
+    },
+    {
+      "name": "Marketing baseline",
+      "monthly": 600,
+      "source": "UNVERIFIED: content production and local events, on top of per-customer CAC"
+    },
+    {
+      "name": "Legal and accounting",
+      "monthly": 300,
+      "source": "UNVERIFIED: bookkeeping plus a one-off counsel review amortised over year one"
+    },
+    {
+      "name": "Support and onboarding hire",
+      "monthly": 0,
+      "steps": [
+        {
+          "at_customers": 300,
+          "monthly": 3500
+        }
+      ],
+      "source": "UNVERIFIED: part-time hire once the founder cannot onboard and support alone"
+    },
+    {
+      "name": "Founder draw",
+      "monthly": 3000,
+      "start_month": 7,
+      "source": "Founder, this conversation: no salary for the first six months"
+    }
+  ],
+  "scenarios": {
+    "conservative": {
+      "new_x": 0.6,
+      "growth_x": 0.7,
+      "churn_x": 1.5,
+      "cac_x": 1.4
+    },
+    "base": {},
+    "optimistic": {
+      "new_x": 1.4,
+      "growth_x": 1.2,
+      "churn_x": 0.75,
+      "cac_x": 0.8
+    }
+  }
+}
