@@ -327,6 +327,19 @@ def main():
             "|---|---|---|---|---|", ""]), encoding="utf-8")
         written.append("validation.md")
 
+    story_path = plan / "story.json"
+    if story_path.exists() and not args.force:
+        skipped.append("story.json")
+    else:
+        story_path.write_text(json.dumps({
+            "venture": args.name,
+            "oneliner": "TODO: what it is and for whom, in 16 words or fewer",
+            "verdict": {"tone": "caution", "label": "TODO", "reason": "TODO"},
+            "next": "TODO",
+            "beats": [],
+        }, indent=2) + "\n", encoding="utf-8")
+        written.append("story.json")
+
     print(f"Scaffolded {plan} for {args.name!r}")
     if written:
         print(f"  wrote   {len(written)}: {', '.join(written)}")

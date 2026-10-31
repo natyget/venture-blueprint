@@ -1,6 +1,6 @@
 ---
 name: venture-blueprint
-description: Plans a software product or company from a rough idea, or none, in three stages that stop between them - brainstorm, plan, build. Brainstorms two or three genuinely different paths, each with its own numbers and app screens, and learns the founder's preferences. Then writes vision, personas, a competitor matrix, bottom-up sizing, cost and revenue projections by scenario, every department's plan from an expert's view, compliance and app-store traps, stack, design language, growth, payments and cheap validation experiments, assembled into a business plan and an interactive venture site with a clickable app prototype. Only when asked, a build roadmap. Use it whenever someone wants to brainstorm, validate or plan a product, app, startup or business - "plan this out", "is this a good idea", "find me a business", "make me money", market fit, business plan, competitors, personas, pricing, projections, go-to-market or a roadmap - or asks what an existing product is missing.
+description: Plans a software product or company from a rough idea, or none, in three stages that stop between them - brainstorm, plan, build. Brainstorms two or three genuinely different paths, each with its own numbers and product imagery, and learns the founder's preferences. Then writes vision, personas, a competitor matrix, bottom-up sizing, cost and revenue projections by scenario, every department's plan from an expert's view, compliance and app-store traps, stack, design language, growth, payments and cheap validation experiments, and tells the case as a venture site: a map to read at a glance and a story to present. Only when asked, a build roadmap. Use it whenever someone wants to brainstorm, validate or plan a product, app, startup or business - "plan this out", "is this a good idea", "find me a business", "make me money", market fit, business plan, pitch, competitors, personas, pricing, projections, go-to-market or a roadmap - or asks what an existing product is missing.
 ---
 
 # Venture blueprint
@@ -21,7 +21,7 @@ The method's one non-negotiable idea: **a plan is a set of claims, and a claim w
 
 **Never start the next stage until the founder says so.** Show the work, ask one question, wait. If they ask to go straight through, still show the paths first — the cheapest redirect in the whole process. A founder who only wants to brainstorm gets Stage 1 and nothing more, and that is a complete outcome.
 
-**Show, don't only tell.** At the end of each stage, build the venture site with `scripts/build_site.py`, open it for the founder (`open plan/venture.html` on a Mac, or publish it if the session can share pages), and point them to it. It holds the verdict, the numbers with live sliders, the three futures, the clickable prototype, the paths side by side, the documents and every gap — so they can understand the plan by looking, not only by reading. Many founders will decide from the site alone.
+**Tell it so it can be understood at a glance.** At the end of each stage, write `plan/story.json` following `references/presentation.md`, build the venture site with `scripts/build_site.py`, and open it for the founder (`open plan/venture.html` on a Mac, or publish it if the session can share pages). The site has two views of the same case. The **map** puts the answer in the centre and each beat of the case on a branch around it, numbered in order, with moss that shows the evidence — green where it's sourced, withered where it's a guess. The **story** plays the beats as slides: one sentence headline that states the point, one number, an X → Y → Z chain, at most three points, the visual that proves it, and the sources. Most founders decide from the site, so it is the deliverable; the documents are the appendix.
 
 ## Stage 1: Explore
 
@@ -31,7 +31,7 @@ Load `references/00-paths.md`. In short:
 2. **A bounded evidence pass** — real complaints, real prices, real competitors, anything with a deadline. With no idea at all, this is where you mine for problems people already pay to avoid (`01-wedge.md` §1).
 3. **Two or three paths that differ in something that matters** — who pays, the wedge, the model, the channel.
 4. **Make each path tangible.** For each: `plan/paths/<id>.json` with rough assumptions (every one may be `UNVERIFIED`, with why), run through `model.py`; and three or four key screens in `plan/paths/<id>.screens.json` following `references/product-preview.md`. Mark your recommendation with `"recommended": true`.
-5. **Build and open the venture site**, then give the comparison in chat in a few lines: your recommendation, what would change your mind, and the question.
+5. **Write the story and build the site.** `plan/story.json` in the explore order — the idea, what the evidence found, one beat per path, the recommendation, the test — following `references/presentation.md`. Build and open the venture site, then give the comparison in chat in a few lines: your recommendation, what would change your mind, and the question.
 6. **Record the answer** in `plan/paths.md` with the founder's preferences as constraints every later phase honours.
 
 ## Stage 2: Plan
@@ -58,7 +58,7 @@ Run the phases for the chosen path. Each ends with a gate you must be able to an
 
 **Then assemble the business plan** following `references/business-plan.md` — executive summary, concept, vision, mission and principles, problem, personas, market, competitor matrix, paths considered, product, model and pricing, financials, go-to-market, organization, compliance and risk, statement of work, milestones, long-term path, and what is unverified. It is a synthesis: every number traces to a phase document or the model.
 
-Build the venture site, run `check_plan.py --stage plan`, fix what it reports, open the site for the founder, and stop. Recommend running the first experiment in the validation plan before building anything.
+Write the plan story in `story.json` — problem, customer, solution, why now, market, competition, model, numbers, go-to-market, risks, next — build the venture site, run `check_plan.py --stage plan`, fix what it reports, open the site for the founder, and stop. Recommend running the first experiment in the validation plan before building anything.
 
 ## Stage 3: Build
 
@@ -68,7 +68,7 @@ Only when the founder asks. Load `references/09-roadmap.md`: every step gets an 
 
 ## What you hand over
 
-- **Stage 1:** `plan/paths/` (each path's assumptions, numbers and screens), `plan/paths.md`, and `plan/venture.html`. In chat: the recommendation, what would change it, and the question.
+- **Stage 1:** `plan/paths/` (each path's assumptions, numbers and screens), `plan/paths.md`, `plan/story.json` and `plan/venture.html`. In chat: the recommendation, what would change it, and the question.
 - **Stage 2:** `plan/business-plan.md` — the readable whole — and `plan/venture.html` — the visual whole — backed by the phase documents, `departments.md`, `validation.md`, `screens.json`, `assumptions.json` with `financials.md` and `.csv`, `decisions.json`, `compliance.csv` and `traps.csv`. In chat: the wedge in two sentences, the verdict and base-case numbers, the first experiment to run, the three decisions most worth challenging, and what could not be verified.
 - **Stage 3:** `roadmap.json`, `09-roadmap.md` and `briefs/`, with the first step to run tonight.
 
@@ -84,7 +84,9 @@ These are the rules that separate a plan from a wish. Each exists because its ab
 
 **Preferences are constraints.** What the founder said in Stage 1 binds every later phase. When the method would choose differently, say so once, then plan what they asked for.
 
-**Show it.** Every path gets screens and every plan gets a venture site. A founder understands a verdict light, a cash curve and a clickable screen faster than any paragraph, and customers can react to a prototype in a way they can't react to a document.
+**Answer first, one idea per beat.** The conclusion leads; each beat's headline is a sentence that states its point; a number beats a paragraph; a visual earns its place only if it proves the headline; three points is the ceiling. A plan that is right but hard to read is not finished.
+
+**Show what you'd build.** Every path gets product imagery in its design language. A founder judges a product faster from three screens than from three paragraphs.
 
 **Test before you build.** The riskiest assumption gets the cheapest experiment that could prove it wrong, with the pass and stop thresholds written before it runs. A dead path found in a week is the system working.
 
@@ -116,7 +118,8 @@ Plans live on disk, so the folder matters. If the session has no project folder 
 - `references/03-compliance.md` — the register, federal and state triggers, Apple and Google policy, verification
 - `references/04-architecture.md` — decisions against alternatives, the native rule, budgets, cost at scale, data model
 - `references/05-design-language.md` — name and identity, inspiration sources, tokens, components, generated assets
-- `references/product-preview.md` — which screens to draw, the screen kit, writing `screens.json`
+- `references/product-preview.md` — which screens to draw as product imagery, the screen kit, writing `screens.json`
+- `references/presentation.md` — telling the case: answer first, sentence headlines, the beat order, word limits, model tokens, the visual chooser
 - `references/06-growth.md` — SEO, ASO, social, loops and their arithmetic, the measurement contract
 - `references/07-monetization.md` — pricing models, the store-policy line per revenue line, payment rails by corridor
 - `references/08-ecosystem.md` — value chain, build vs rent vs absorb, the operator console
@@ -126,7 +129,7 @@ Plans live on disk, so the folder matters. If the session has no project folder 
 - `references/10-red-team.md` — the hostile read, abuse and edge cases, kill scenarios, the pre-handoff audit
 - `references/traps.md` — the fixed trap sweep
 - `references/business-plan.md` — assembling the business plan
-- `templates/` — `traps.json`, `departments.json`, `assumptions.example.json`, `screens.example.json`, `schemas.md`
+- `templates/` — `traps.json`, `departments.json`, `assumptions.example.json`, `screens.example.json`, `story.example.json`, `schemas.md`
 - `examples/pxi-analytics-release.md` — a real plan at the target resolution, annotated
 
 ## Scripts
@@ -141,4 +144,4 @@ python3 -I scripts/check_plan.py <plan> --stage explore|plan|build
 python3 -I scripts/parallel_brief.py <plan> --out <plan>/briefs
 ```
 
-`check_plan.py` checks only what the current stage should have produced, and warns when the venture site is older than the plan files. It is deliberately strict about the mechanical rules, because those are the failures that are invisible on a read-through and expensive in week three.
+`check_plan.py` checks only what the current stage should have produced — including the story's word limits, beat order, model tokens, sources on evidence claims and an honest verdict — and warns when the venture site is older than the plan files. It is deliberately strict about the mechanical rules, because those are the failures that are invisible on a read-through and expensive in week three.

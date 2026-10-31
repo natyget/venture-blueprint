@@ -1,0 +1,243 @@
+{
+  "venture": "ToolShare",
+  "oneliner": "Shared tool libraries for apartment buildings, booked from a phone.",
+  "verdict": {
+    "tone": "promising",
+    "label": "Promising, not yet proven",
+    "reason": "Selling to buildings pays back fastest on paper, but every input is still a guess."
+  },
+  "next": "Offer a paid pilot to five buildings before building anything.",
+  "beats": [
+    {
+      "id": "idea",
+      "kind": "question",
+      "kicker": "The idea",
+      "status": "guess",
+      "title": "Renters need a drill twice a year and have nowhere to keep one",
+      "points": [
+        "Borrowing from neighbours depends on already knowing them",
+        "Buildings already share gyms, parcel rooms and laundry"
+      ],
+      "facts": [
+        {
+          "label": "Storage pain: confirm in interviews",
+          "status": "guess"
+        },
+        {
+          "label": "Buildings already run amenities",
+          "status": "partial"
+        }
+      ],
+      "chain": [
+        {
+          "value": "Rare use",
+          "label": "a few jobs a year"
+        },
+        {
+          "value": "No space",
+          "label": "in a small apartment"
+        },
+        {
+          "value": "Shared",
+          "label": "one library per building"
+        }
+      ]
+    },
+    {
+      "id": "store",
+      "kind": "evidence",
+      "kicker": "What we found",
+      "status": "strong",
+      "title": "Anything sold inside an app gives the store a cut",
+      "kpi": {
+        "value": "15–30%",
+        "label": "store commission on in-app sales"
+      },
+      "points": [
+        "Path A sells its membership in the app, so it pays",
+        "Paths B and C charge on the web or for real-world use",
+        "Selling on the web is the same move PXI made with ad credits"
+      ],
+      "sources": [
+        {
+          "label": "App Store Review Guidelines 3.1.1",
+          "url": "https://developer.apple.com/app-store/review/guidelines/",
+          "date": "2026-10-28"
+        },
+        {
+          "label": "App Store Small Business Program",
+          "url": "https://developer.apple.com/app-store/small-business-program/",
+          "date": "2026-10-28"
+        }
+      ]
+    },
+    {
+      "id": "a",
+      "kind": "path",
+      "kicker": "A · Consumer app",
+      "status": "risk",
+      "title": "A consumer app loses more money the faster it grows",
+      "kpi": {
+        "value": "{{a-consumer-app.base.funding}}",
+        "label": "needed before it pays",
+        "note": "Expected case, 3 years"
+      },
+      "chain": [
+        {
+          "value": "{{a-consumer-app.base.cac}}",
+          "label": "to win a member"
+        },
+        {
+          "value": "{{a-consumer-app.base.margin}}",
+          "label": "earned per member"
+        },
+        {
+          "value": "{{a-consumer-app.base.payback}}",
+          "label": "to earn it back"
+        }
+      ],
+      "points": [
+        "Only 6% of members pay, and the store takes 15%",
+        "Every new member costs more than they return"
+      ],
+      "visual": {
+        "type": "numbers",
+        "path": "a-consumer-app",
+        "metric": "cash"
+      },
+      "facts": [
+        {
+          "label": "6% pay: guess",
+          "status": "guess"
+        },
+        {
+          "label": "15% store cut: Apple",
+          "status": "strong"
+        }
+      ]
+    },
+    {
+      "id": "b",
+      "kind": "path",
+      "kicker": "B · For buildings",
+      "status": "guess",
+      "title": "Selling to property managers pays for itself by {{b-property-saas.base.break_even}}",
+      "kpi": {
+        "value": "{{b-property-saas.base.revenue_end}}",
+        "label": "revenue by year 3",
+        "note": "Expected case"
+      },
+      "chain": [
+        {
+          "value": "$149",
+          "label": "per building, monthly"
+        },
+        {
+          "value": "{{b-property-saas.base.payback}}",
+          "label": "to earn back a sale"
+        },
+        {
+          "value": "{{b-property-saas.base.ltv_cac}}",
+          "label": "value vs. cost to win"
+        }
+      ],
+      "points": [
+        "One sale brings a whole building of users",
+        "The manager pays; residents borrow free"
+      ],
+      "visual": {
+        "type": "screens",
+        "path": "b-property-saas"
+      },
+      "facts": [
+        {
+          "label": "$149 price: untested",
+          "status": "guess"
+        },
+        {
+          "label": "2% monthly churn: guess",
+          "status": "guess"
+        }
+      ]
+    },
+    {
+      "id": "c",
+      "kind": "path",
+      "kicker": "C · Marketplace",
+      "status": "guess",
+      "title": "A rental marketplace needs {{c-rental-marketplace.base.funding}} before it pays",
+      "kpi": {
+        "value": "{{c-rental-marketplace.base.break_even}}",
+        "label": "first profitable month",
+        "note": "Expected case"
+      },
+      "chain": [
+        {
+          "value": "15%",
+          "label": "cut of each rental"
+        },
+        {
+          "value": "{{c-rental-marketplace.base.margin}}",
+          "label": "earned per renter"
+        },
+        {
+          "value": "{{c-rental-marketplace.base.churn}}",
+          "label": "of renters leave"
+        }
+      ],
+      "points": [
+        "Needs tools and renters in the same streets at once",
+        "Damage disputes eat 12% of revenue"
+      ],
+      "visual": {
+        "type": "numbers",
+        "path": "c-rental-marketplace",
+        "metric": "cash"
+      }
+    },
+    {
+      "id": "pick",
+      "kind": "recommendation",
+      "kicker": "Recommendation",
+      "status": "partial",
+      "title": "Start with buildings, and add a consumer app only once it works",
+      "points": [
+        "Pays back fastest and needs no outside money",
+        "No app-store cut: managers pay on the web",
+        "Buildings give the density a consumer app would need"
+      ],
+      "visual": {
+        "type": "compare"
+      }
+    },
+    {
+      "id": "test",
+      "kind": "test",
+      "kicker": "Test first",
+      "status": "guess",
+      "title": "Five building managers will tell us in two weeks if the price holds",
+      "chain": [
+        {
+          "value": "5",
+          "label": "buildings offered a paid pilot"
+        },
+        {
+          "value": "3",
+          "label": "must sign to keep going"
+        },
+        {
+          "value": "0–1",
+          "label": "means stop"
+        }
+      ],
+      "points": [
+        "Price is what the result depends on most",
+        "A signed pilot is proof; a polite yes is not"
+      ],
+      "visual": {
+        "type": "sensitivity",
+        "path": "b-property-saas"
+      }
+    }
+  ]
+}

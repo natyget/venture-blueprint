@@ -50,7 +50,7 @@ Opening Claude Code inside that folder is enough — the skill loads automatical
 1. **Start in a folder you'll keep.** The plan is saved as files. In Claude Code, make a folder for the idea — say `ventures/tool-share` — and open the session there.
 2. **Describe the idea in plain words.** You don't need a command; the skill switches itself on. (To call it directly, type `/venture` and pick it from the list.)
 3. **Answer the questions.** It asks about you, your money and time, and what you prefer — fast money or a bigger business, who pays, how you like to sell, what you won't do. Mostly multiple choice, all at once.
-4. **Look at the venture site.** A page opens in your browser with two or three ways to do your idea, side by side. Each has a verdict (works / works if you can fund it / doesn't work yet), its numbers in bad, expected and great years, and app screens you can tap through. Drag the sliders to try your own guesses.
+4. **Look at the venture site.** A page opens in your browser with your idea in the middle and the case branching around it — green where it's backed by evidence, grey where it's still a guess, red where it's a risk. Click any branch to read it, or press **Story** to have it told one slide at a time, like a pitch. Each way to build the idea gets a verdict, its numbers in bad, expected and great years, and pictures of what the app would look like.
 5. **Pick a path.** Tell Claude which one, a mix of two, or none of them.
 6. **Say "plan it"** for the full plan: business plan, personas, competitors, every department, projections, risks, and the cheapest experiments to test the idea before building. The site updates with all of it.
 7. **Say "build it"** only when you want the step-by-step build plan.

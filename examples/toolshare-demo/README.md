@@ -1,9 +1,15 @@
 # Example: ToolShare, at the end of the brainstorm stage
 
-Three ways to build one idea — neighbours sharing tools — as the skill lays them out in Stage 1. Download `venture.html` and open it in a browser to click through it: the verdict for each path, the numbers in bad, expected and great years with live sliders, and the app screens for paths A and B.
+Three ways to build one idea — neighbours sharing tools — told the way the skill tells every plan. Download `venture.html` and open it in a browser.
 
-The numbers are rough planning estimates marked `UNVERIFIED`, as they should be at this stage. That is the point of the example: even with rough numbers, the site makes it obvious that the consumer app loses more money the more it grows, that the property-manager path pays for itself in month 5, and that everything hinges on prices — which is what the founder should test first.
+- **Map** — ToolShare in the centre with its verdict; the case branching around it in reading order. Green moss where a beat is backed by sources (Apple's store rules), red where it's a risk (the consumer app), grey where it's still a guess.
+- **Story** — press Story, then the arrow keys: the idea, what the research found, each path with its numbers or its product, the recommendation, and the test to run first.
 
+The numbers are rough estimates marked `UNVERIFIED`, as they should be at this stage, and the verdict says so: *promising, not yet proven*. Even so, the site makes three things obvious: the consumer app loses more money the faster it grows, selling to buildings pays for itself by month 5, and everything hinges on price — which is what to test first.
+
+- `story.json` — the case, beat by beat
 - `paths/*.json` — each path's assumptions
-- `paths/*.screens.json` — each path's screens
+- `paths/*.screens.json` — each path's screens, shown as product imagery
 - `venture.html` — the generated site
+
+This folder holds only what the site is built from. A real plan folder also has the brief and `paths.md`, which `check_plan.py` requires, so running the checker here reports those two as missing.

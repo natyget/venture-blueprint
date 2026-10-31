@@ -1,7 +1,7 @@
 {
   "name": "venture-blueprint",
-  "version": "1.2.0",
-  "description": "Plans a software product or company from a rough idea, or none: brainstorms two or three paths with their own numbers and app screens, then a full business plan with personas, competitors, projections, every department and validation experiments, shown as an interactive venture site with a clickable prototype; then, when asked, a build roadmap.",
+  "version": "1.3.0",
+  "description": "Plans a software product or company from a rough idea, or none: brainstorms two or three paths with their own numbers and product imagery, then a full business plan with personas, competitors, projections, every department and validation experiments, told as a venture site you can read at a glance and present as a story; then, when asked, a build roadmap.",
   "author": {
     "name": "Naty"
   },

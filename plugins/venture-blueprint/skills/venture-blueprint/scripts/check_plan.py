@@ -298,8 +298,6 @@ def check_screens(path, label, required, rep):
     if required and len(data["screens"]) < 3:
         rep.error(path.name, f"only {len(data['screens'])} screen(s) — draw the whole "
                              "core loop, the buyer's screen and the money moment")
-    if required and not data["flows"]:
-        rep.warn(path.name, "no flows — add one per job a persona does")
 
 
 def check_paths_dir(plan, rep):
@@ -335,6 +333,182 @@ def check_paths_dir(plan, rep):
                                          "UNVERIFIED with a reason is fine at this stage")
         check_screens(f.with_name(f"{f.stem}.screens.json"),
                       a.get("path") or f.stem, False, rep)
+
+
+STORY_KINDS = {
+    "explore": {"question", "evidence", "path", "recommendation", "test"},
+    "plan": {"problem", "customer", "solution", "why-now", "market", "competition", "model",
+             "numbers", "go-to-market", "team", "departments", "compliance", "traction",
+             "evidence", "risks", "next"},
+}
+STORY_REQUIRED = {
+    "explore": ["question", "path", "recommendation", "test"],
+    "plan": ["problem", "customer", "solution", "market", "competition", "model", "numbers",
+             "risks", "next"],
+}
+VISUALS = {"numbers", "compare", "sensitivity", "screens", "bars", "matrix", "timeline", "quote"}
+TONES = {"go", "promising", "caution", "stop"}
+STATUSES = {"strong", "partial", "guess", "risk"}
+TOKEN = re.compile(r"\{\{\s*([\w-]+)\.([\w-]+)\.([\w-]+)\s*\}\}")
+
+
+def nwords(s):
+    """Words, not punctuation: "A · Consumer app" is three."""
+    return sum(1 for w in TOKEN.sub("N", str(s or "")).split() if re.search(r"[^\W_]", w))
+
+
+def story_metrics(plan):
+    """Every path's model metrics, keyed as story tokens address them."""
+    site, model = load_script("build_site"), load_script("model")
+    files = []
+    if (plan / "paths").is_dir():
+        files = [(f.stem, f) for f in sorted((plan / "paths").glob("*.json"))
+                 if not f.name.endswith(".screens.json") and not f.stem.endswith("-financials")]
+    if (plan / "assumptions.json").exists():
+        files.append(("plan", plan / "assumptions.json"))
+    out, inputs = {}, {}
+    for pid, f in files:
+        try:
+            raw = f.read_text(encoding="utf-8")
+            if "TODO" in raw:
+                continue
+            a = json.loads(raw)
+            with contextlib.redirect_stderr(io.StringIO()):
+                model.validate(a)
+        except (OSError, json.JSONDecodeError, SystemExit):
+            continue
+        out[pid], inputs[pid] = site.path_metrics(model, a), a
+    return out, inputs, site.SCEN_ALIAS
+
+
+def check_story(plan, stage, rep):
+    path = plan / "story.json"
+    if not path.exists():
+        rep.error("story.json", "missing — the venture site tells the case from it "
+                                "(references/presentation.md)")
+        return
+    raw = path.read_text(encoding="utf-8")
+    if "TODO" in raw:
+        rep.error("story.json", "still has TODO markers")
+        return
+    try:
+        s = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        rep.error("story.json", f"invalid JSON: {exc}")
+        return
+    key = "explore" if stage == "explore" else "plan"
+    if not nwords(s.get("oneliner")):
+        rep.error("story.json", "no oneliner — what this is and for whom")
+    elif nwords(s.get("oneliner")) > 16:
+        rep.error("story.json", f"oneliner is {nwords(s.get('oneliner'))} words; keep it to 16")
+    v = s.get("verdict") or {}
+    if v.get("tone") not in TONES:
+        rep.error("story.json", f"verdict.tone must be one of {sorted(TONES)}")
+    if not nwords(v.get("label")) or nwords(v.get("label")) > 6:
+        rep.error("story.json", "verdict.label: 1-6 words")
+    if nwords(v.get("reason")) > 20:
+        rep.error("story.json", f"verdict.reason is {nwords(v.get('reason'))} words; keep it to 20")
+    if not nwords(s.get("next")):
+        rep.warn("story.json", "no next step")
+
+    metrics, inputs, alias = story_metrics(plan)
+    beats = s.get("beats") or []
+    if not beats:
+        rep.error("story.json", "no beats")
+        return
+    kinds = []
+    for i, b in enumerate(beats):
+        where = f"story.json/{b.get('id') or i}"
+        kind = b.get("kind")
+        kinds.append(kind)
+        if kind not in STORY_KINDS[key]:
+            rep.error(where, f"kind {kind!r} isn't part of the {key} story: "
+                             f"{', '.join(sorted(STORY_KINDS[key]))}")
+        if not 1 <= nwords(b.get("kicker")) <= 3:
+            rep.error(where, "kicker: 1-3 words")
+        tw = nwords(b.get("title"))
+        if tw < 4:
+            rep.error(where, "title must be a sentence that states the point, not a label")
+        elif tw > 14:
+            rep.error(where, f"title is {tw} words; keep it to 14")
+        status = b.get("status")
+        if status not in STATUSES:
+            rep.error(where, f"status must be one of {sorted(STATUSES)}")
+        srcs = b.get("sources") or []
+        if status == "strong" and not any(x.get("url") and x.get("date") for x in srcs):
+            rep.error(where, "status 'strong' needs at least one source with a url and a date")
+        for x in srcs:
+            if x.get("url") and not x.get("date"):
+                rep.warn(where, f"source {x.get('label', '?')!r} has no date read")
+        pts = b.get("points") or []
+        if len(pts) > 3:
+            rep.error(where, f"{len(pts)} points; three is the ceiling")
+        for pt in pts:
+            if nwords(pt) > 14:
+                rep.error(where, f"point is {nwords(pt)} words (max 14): {str(pt)[:60]}")
+        kpi = b.get("kpi") or {}
+        if kpi and nwords(kpi.get("label")) > 6:
+            rep.error(where, "kpi.label: keep it to 6 words")
+        if kpi and re.search(r"[$€£]\s?\d", str(kpi.get("value", ""))) \
+                and not TOKEN.search(str(kpi.get("value", ""))) and not srcs:
+            rep.warn(where, f"kpi {kpi.get('value')!r} is typed by hand — a model figure "
+                            "should be a token, a research figure needs a source")
+        chain = b.get("chain") or []
+        if chain and not 2 <= len(chain) <= 4:
+            rep.error(where, "chain: 2-4 steps")
+        for c in chain:
+            if nwords(c.get("label")) > 6:
+                rep.error(where, f"chain label too long: {str(c.get('label'))[:50]}")
+        facts = b.get("facts") or []
+        if len(facts) > 6:
+            rep.warn(where, f"{len(facts)} facts; the map shows six")
+        vis = b.get("visual") or {}
+        if vis:
+            if vis.get("type") not in VISUALS:
+                rep.error(where, f"visual.type must be one of {sorted(VISUALS)}")
+            ref = vis.get("path") or vis.get("set")
+            if ref and ref not in metrics:
+                rep.error(where, f"visual shows {ref!r}, which isn't a path with valid numbers")
+            if vis.get("type") == "screens" and ref:
+                sf = (plan / "screens.json") if ref == "plan" else (plan / "paths" / f"{ref}.screens.json")
+                if not sf.exists():
+                    rep.error(where, f"screens visual for {ref!r}, but {sf.name} doesn't exist")
+        if not (kpi or chain or vis):
+            rep.warn(where, "only words — give it a number, a chain or a visual")
+        blob = json.dumps(b)
+        for m in TOKEN.finditer(blob):
+            pid, scen, metric = m.group(1), alias.get(m.group(2), m.group(2)), m.group(3)
+            if pid not in metrics:
+                rep.error(where, f"{m.group(0)}: no path {pid!r} with valid numbers")
+            elif scen not in metrics[pid]:
+                rep.error(where, f"{m.group(0)}: no scenario {m.group(2)!r}")
+            elif metric not in metrics[pid][scen]:
+                rep.error(where, f"{m.group(0)}: unknown metric {metric!r}")
+        for field in [b.get("title")] + list(pts):
+            found = [x.group(0) for x in BANNED.finditer(str(field or ""))]
+            if found:
+                rep.warn(where, f"slogan wording {', '.join(dict.fromkeys(found))} — say the concrete thing")
+
+    for req in STORY_REQUIRED[key]:
+        if req not in kinds:
+            rep.error("story.json", f"no '{req}' beat — the {key} story needs: "
+                                    f"{', '.join(STORY_REQUIRED[key])}")
+    firsts = [kinds.index(k) for k in STORY_REQUIRED[key] if k in kinds]
+    if firsts != sorted(firsts):
+        rep.error("story.json", "beats are out of order — tell it as: "
+                                f"{' → '.join(STORY_REQUIRED[key])}")
+    if key == "explore" and kinds.count("path") < 2:
+        rep.error("story.json", "one beat per path, at least two")
+
+    primary = inputs.get("plan") or next((a for a in inputs.values() if a.get("recommended")), None) \
+        or next(iter(inputs.values()), None)
+    if primary and v.get("tone") == "go":
+        blocks = ([primary.get("customers")] + list(primary.get("revenue_lines") or [])
+                  + list(primary.get("variable_costs") or []) + list(primary.get("fixed_costs") or []))
+        guesses = sum(1 for bl in blocks if source_state(bl) != "ok")
+        if guesses * 2 > len(blocks):
+            rep.error("story.json", f"verdict 'go' while {guesses} of {len(blocks)} model inputs "
+                                    "are unverified — say 'promising' until the riskiest are tested")
 
 
 def check_site(plan, rep):
@@ -728,6 +902,7 @@ def main():
         if decisions and decisions.get("decisions"):
             check_decisions(decisions, rep)
 
+    check_story(plan, stage, rep)
     check_site(plan, rep)
 
     if rep.errors:

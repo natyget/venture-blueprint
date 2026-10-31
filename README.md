@@ -54,16 +54,14 @@ It works in three stages and **stops between them**:
 
 ## The venture site
 
-At the end of each stage you get `plan/venture.html` — one page that opens in any browser, with nothing to install and nothing sent anywhere:
+At the end of each stage you get `plan/venture.html` — one page in a window, with nothing to install and nothing sent anywhere. It tells the case two ways:
 
-- **Overview** — the verdict at a glance, the key numbers as tiles, three futures (bad, expected, great) and the app.
-- **Product** — a clickable prototype in an iPhone, Android or browser frame. Tap through it, or play a flow step by step.
-- **Numbers** — drag sliders for customers, churn, prices, costs and cash and watch every chart move; good and bad years as bars; which assumption the result depends on most; how cost and revenue scale.
-- **Paths** — the options side by side, each with its verdict.
-- **Plan, Company, Validation** — the documents, readable.
-- **Gaps** — everything unverified, unanswered or worrying, by severity.
+- **Map.** Your idea sits in the centre with the verdict under it; each beat of the case branches out around it, numbered in reading order, with its key number beside it. Moss grows along each branch: green where it's backed by sources, yellow where it's partly backed, grey where it's still a guess, red where it's a risk. You see at a glance what's solid and what's missing. Click any branch for its point, its number, its X → Y → Z and its sources.
+- **Story.** The same beats as a presentation, in the order investors expect: one sentence headline that states the point, one big number, the chain behind it, at most three points, the one visual that proves it — a chart, the product, a comparison — and the sources underneath. Arrow keys move through it.
 
-The page runs the same model as the Python scripts and checks itself against them when it opens.
+The product appears as polished imagery — three phones or a browser window in the product's own colours — not as a demo. Charts run the same model as the Python scripts and check themselves against it, and numbers in the headlines are filled in from the model, so the words can never disagree with the projections.
+
+The full documents — business plan, paths, departments, validation — are one click away under **Documents**.
 
 ## What you get
 
@@ -73,7 +71,8 @@ plan/
 ├── business-plan.md         the readable whole
 ├── paths/                   each path's assumptions, projections and screens
 ├── paths.md                 the options and your preferences
-├── screens.json             the chosen product's clickable prototype
+├── story.json               the case, beat by beat — what the site tells
+├── screens.json             the product's screens, shown as imagery
 ├── departments.md           sixteen departments, each planned from its head's view
 ├── validation.md            the riskiest assumptions and how to test them cheaply
 ├── 00-brief.md … 10-red-team.md   the phase documents behind it all
